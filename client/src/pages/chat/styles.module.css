@@ -16,6 +16,21 @@
     font-size: 2rem;
     color: #fff;
   }
+
+  .roomListTitle {
+    font-size: 1.2rem;
+    color: #fff;
+    margin-bottom: 10px;
+    position: relative;
+    left: -65px;
+  }
+  .roomsList {
+    list-style-type: none;
+    padding-left: 0;
+    margin-bottom: 60px;
+    color: rgb(153, 217, 234);
+  }
+
   .usersTitle {
     font-size: 1.2rem;
     color: #fff;
@@ -75,8 +90,24 @@
     transition: 0.4s;
   }
 
-  .log {
+  .join {
     color: rgb(104, 85, 224);
     background-color: rgba(255, 255, 255, 1);
     border: 1px solid rgba(104, 85, 224, 1);
+    /* align bottom */
+    position: relative;
+    bottom: -400px;
+    left: 0;
+  }
+
+  .roomInput {
+    padding: 4px;
+    margin-right: 0px;
+    width: 90%;
+    border-radius: 10px;
+    border: 1px solid rgb(153, 217, 234);
+    font-size: 0.9rem;
+    position: relative;
+    bottom: -390px;
+    /* left: 10px */
   }

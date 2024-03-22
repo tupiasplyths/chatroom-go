@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 )
 
 type Room struct {
@@ -49,6 +50,7 @@ func (room *Room) broadcastToRoom(message []byte) {
 	for client := range room.clients {
 		client.send <- message
 	}
+	log.Printf("sent a message to room %s\n", room.GetName())
 }
 
 func (room *Room) notifyClientsJoined(client *Client) {
@@ -56,6 +58,7 @@ func (room *Room) notifyClientsJoined(client *Client) {
 		Action:  SendMessageAction,
 		Target:  room,
 		Message: fmt.Sprintf("welcome %s", client.GetName()),
+		Sender:  &Client{Name: "bot"},
 	}
 
 	room.broadcastToRoom(message.encode())
@@ -63,4 +66,8 @@ func (room *Room) notifyClientsJoined(client *Client) {
 
 func (room *Room) GetName() string {
 	return room.Name
+}
+
+func (room *Room) GetClients() map[*Client]bool {
+	return room.clients
 }

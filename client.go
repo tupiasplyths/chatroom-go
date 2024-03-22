@@ -161,6 +161,12 @@ func (client *Client) handleNewMessage(jsonMessage []byte) {
 		client.handleJoinRoomMessage(message)
 	case LeaveRoomAction:
 		client.handleLeaveRoomMessage(message)
+	case "list-users":
+		roomName := message.Target
+		if room := client.wsServer.findRoomByName(roomName.Name); room != nil {
+			room.notifyClientsJoined(client)
+		}
+		log.Println("re-list users")
 	}
 	
 }
