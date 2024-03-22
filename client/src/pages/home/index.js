@@ -1,22 +1,22 @@
 import styles from './styles.module.css';
 import { useNavigate } from 'react-router-dom';
 
-const Home = ({ username, room, onUsernameChange, onRoomNameChange, setUsername}) => {
+const Home = ({ username, onUsernameChange, setUsername}) => {
     const navigate = useNavigate();
-    const joinRoom = () => {
+    const joinChat = (username) => {
         // if (room !== '' && username !== '') {
         //     socket.send(JSON.stringify({ action: 'join-room', message: room }));
         // }
-        // setUsername(document.getElementById('username').value);
+        // onUsernameChange(username);
         navigate('/chat', { replace:true });
     };
 
     const handleUsernameChange = (username) => {
         onUsernameChange(username);
     }
-    const handleRoomNameChange = (room) => {
-        onRoomNameChange(room);
-    }
+    // const handleRoomNameChange = (room) => {
+    //     onRoomNameChange(room);
+    // }
    
 
     return (
@@ -25,7 +25,7 @@ const Home = ({ username, room, onUsernameChange, onRoomNameChange, setUsername}
             <h1>{`<>DevRooms</>`}</h1>
             <input className={styles.input} placeholder='Username' onChange={(e) => handleUsernameChange(e.target.value)}/>
 
-            <select className={styles.input}
+            {/* <select className={styles.input}
             onChange={(e) => handleRoomNameChange(e.target.value)}
             >
             <option>-- Select Room --</option>
@@ -33,11 +33,14 @@ const Home = ({ username, room, onUsernameChange, onRoomNameChange, setUsername}
             <option value='node'>Node</option>
             <option value='express'>Express</option>
             <option value='react'>React</option>
-            </select>
+            </select> */}
 
-            <button className='btn btn-secondary' style={{ width: '100%' }}
-                onClick={joinRoom}
-            >Join Room</button>
+            <button 
+                className='btn btn-secondary' style={{ width: '100%' }}
+                onClick={(e) => joinChat(e.target.value)}
+            >
+                Join Chat
+            </button>
         </div>
         </div>
     );

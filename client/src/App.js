@@ -3,23 +3,30 @@ import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/home';
 import Chat from './pages/chat'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { SocketProvider } from './wsContext';
+
 
 function App() {
   const [username, setUsername] = useState('default');
-  const [room, setRoom] = useState('pog');
+  // const [room, setRoom] = useState('pog');
+  // const [socket, setSocket] = useState(new WebSocket("ws://localhost:3789/ws?name=" + username));
+
   // const [socket, setSocket] = useState(new WebSocket("ws://localhost:3789/ws?name=abc"))
   const onUsernameChange = (username) => {
     setUsername(username);
+    // socket.close();
+    // setSocket(new WebSocket("ws://localhost:3789/ws?name=" + username))
     console.log("username changed to " + username + ' ' + typeof username)
   }
-  const onRoomNameChange = (room) => {
-    setRoom(room);
-    console.log("room changed to " + room)
-  }
+  // const onRoomNameChange = (room) => {
+  //   setRoom(room);
+  //   console.log("room changed to " + room)
+  // }
   
 
   // useEffect(() => {
+  //   socket.;
   //   let tmpSocket = new WebSocket("ws://localhost:3789/ws?name=" + username)
   //   setSocket(tmpSocket)
   //   return () => socket.close();
@@ -33,17 +40,19 @@ function App() {
           element={
             <Home 
               username = {username}              
-              room = {room}
+              // room = {room}
               // socket = {socket}
               onUsernameChange={onUsernameChange}
-              onRoomNameChange={onRoomNameChange}
+              // onRoomNameChange={onRoomNameChange}
               setUsername={setUsername}
               // onNameBeingDone={onNameBeingDone}
             />} 
           />
           <Route path='/chat' 
             element={
-              <Chat username={username} room={room} />
+              <SocketProvider username={username}>
+                <Chat username={username} />
+              </SocketProvider>
             }
           />
 

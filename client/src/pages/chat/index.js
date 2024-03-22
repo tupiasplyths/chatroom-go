@@ -1,15 +1,20 @@
 import styles from './styles.module.css';
 import MessagesReceived from './messages';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useContext } from 'react';
 import SendMessage from './send-message';
+import UsersAndRooms from './userandroom';
+import { useSocket } from '../../wsContext';
 
-const Chat = ({ username, room }) => {
-    // TODO limit websockets to 1 connection
+// const socket = new WebSocket("ws://localhost:3789/ws?name=abc");
+
+const Chat = ({ username }) => {
+    const [room, setRoom] = useState('');
     const [rooms, setRooms] = useState([]);
-    
-    // const [socket, setSocket] = useState(new WebSocket("ws://localhost:3789/ws?name=" + username));
+    const socket = useSocket();
+    // let rooms = [];
+    // const socket = useRef(new WebSocket("ws://localhost:3789/ws?name=" + username));
     // const [socket, setSocket] = useState(null)
-    const socket = new WebSocket("ws://localhost:3789/ws?name=" + username);
+    // const socket = new WebSocket("ws://localhost:3789/ws?name=" + username);
     useEffect(() => {
         // const tmpSocket = new WebSocket("ws://localhost:3789/ws?name=" + username)
         // setSocket(tmpSocket)
@@ -25,24 +30,20 @@ const Chat = ({ username, room }) => {
             setTimeout(() => { }, 5000);
         }
         console.log("got username " + username)
-        socket.addEventListener('open', (event) => {
-            console.log("connected")
-        });
         
-        
-
-        // return () => socket.close(1000, "closed");
+        return () => socket.close(1000, "closed");
     }, []);
 
     
     
     return (
         <div className={styles.chatContainer}>
+            <UsersAndRooms socket={socket} username={username} rooms={rooms} room={room} setRooms={setRooms} setRoom={setRoom}></UsersAndRooms>
             <div> 
                 <MessagesReceived socket={socket} rooms={rooms} room={room} setRooms={setRooms}/>   
                 <SendMessage 
-                    socket={socket} username={username} room={room} rooms={rooms} setRooms={setRooms}
-                />             
+                    socket={socket} username={username} room={room} rooms={rooms} setRooms={setRooms} 
+                />
             </div>
         </div>
     )
