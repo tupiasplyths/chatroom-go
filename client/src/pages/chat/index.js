@@ -11,20 +11,8 @@ const Chat = ({ username }) => {
     const [room, setRoom] = useState('');
     const [rooms, setRooms] = useState([]);
     const socket = useSocket();
-    // let rooms = [];
-    // const socket = useRef(new WebSocket("ws://localhost:3789/ws?name=" + username));
-    // const [socket, setSocket] = useState(null)
-    // const socket = new WebSocket("ws://localhost:3789/ws?name=" + username);
+    const [roomUsers, setRoomUsers] = useState([]);
     useEffect(() => {
-        // const tmpSocket = new WebSocket("ws://localhost:3789/ws?name=" + username)
-        // setSocket(tmpSocket)
-        // setRooms([
-            //     ...rooms,
-        //     {
-        //         name: room,
-        //         messages: [],
-        //     }
-        // ])
         if (socket.readyState !== 1) {
             console.log("socket not ready")
             setTimeout(() => { }, 5000);
@@ -38,11 +26,11 @@ const Chat = ({ username }) => {
     
     return (
         <div className={styles.chatContainer}>
-            <UsersAndRooms socket={socket} username={username} rooms={rooms} room={room} setRooms={setRooms} setRoom={setRoom}></UsersAndRooms>
+            <UsersAndRooms socket={socket} username={username} roomUsers={roomUsers} setRoomUsers={setRoomUsers} rooms={rooms} room={room} setRooms={setRooms} setRoom={setRoom}></UsersAndRooms>
             <div> 
-                <MessagesReceived socket={socket} rooms={rooms} room={room} setRooms={setRooms}/>   
+                <MessagesReceived socket={socket} roomUsers={roomUsers} setRoomUsers={setRoomUsers} rooms={rooms} room={room} setRooms={setRooms}/>   
                 <SendMessage 
-                    socket={socket} username={username} room={room} rooms={rooms} setRooms={setRooms} 
+                    socket={socket} room={room} rooms={rooms} setRooms={setRooms} 
                 />
             </div>
         </div>
