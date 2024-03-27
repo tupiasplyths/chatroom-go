@@ -33,7 +33,10 @@ const UsersAndRooms = ({ socket, rooms, room, setRooms, setRoom, roomUsers}) => 
     // })
 
     useEffect(() => {
-        
+        if (socket && socket.readyState === 1) {
+            console.log("listing users")
+            socket.send(JSON.stringify({ action: 'get-users', target: {name: room} }));
+        }
 
     },[room, rooms, socket]) 
     

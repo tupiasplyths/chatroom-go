@@ -6,25 +6,22 @@ const Messages = ({ socket, rooms, room, setRooms, roomUsers, setRoomUsers}) => 
 
     
     useEffect(() => {
-        socket.addEventListener('message', (event) => {
+        socket.addEventListener('message', messageHandle);
+
+        function messageHandle(event) {
             console.log("Message from server ", event.data)
-            handleNewMessage(event)  
-        });
-        if (socket && socket.readyState === 1) {
-            socket.send(JSON.stringify({ action: 'get-users', target: {name: room} }));
+            handleNewMessage(event)
         }
         function handleNewMessage(event) {
             let data = event.data
             data = data.split(/\r?\n/)
-            console.log(data)
+            console.log(data + " " + data.length);
             for (let i = 0; i < data.length; i++) {
                 let msg =JSON.parse(data[i]);
                 switch (msg.action) {
                     case "send-message": 
                         const targetRoom = findRoom(msg.target.name);
                         if (typeof targetRoom !== 'undefined') {
-                            
-                            // console.log(targetRoom.messages);
                             const appendedRoomMessage = rooms.map((room, i) => {
                                 if (room.name === targetRoom.name) {
                                     return {
@@ -37,15 +34,12 @@ const Messages = ({ socket, rooms, room, setRooms, roomUsers, setRoomUsers}) => 
                             });
                             setRooms(appendedRoomMessage);
                             console.log(rooms)
-                            
-                            // console.log(currentRoomMessages);
                         }
                         break;
                     case 'list-users': 
                         console.log(msg);
                         let users = msg.message.slice(1,-1);
                         setRoomUsers(users.split(' '));
-                        
                         break;
                     default: 
                         break;
@@ -75,7 +69,7 @@ const Messages = ({ socket, rooms, room, setRooms, roomUsers, setRoomUsers}) => 
             //do something
         }
         console.log(roomUsers);
-        return () => socket.removeEventListener('message', handleNewMessage);
+        return () => socket.removeEventListener('message', messageHandle);
     },[room, currentRoomMessages, rooms]);
 
 
