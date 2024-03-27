@@ -1,42 +1,56 @@
 import styles from './styles.module.css';
 import { useState, useEffect } from 'react';
 
-const Messages = ({ socket, rooms, room, setRooms}) => {
+const Messages = ({ socket, rooms, room, setRooms, roomUsers, setRoomUsers}) => {
     const [currentRoomMessages, setCurrentRoomMessages] = useState([]);
 
-    
-    
     
     useEffect(() => {
         socket.addEventListener('message', (event) => {
             console.log("Message from server ", event.data)
             handleNewMessage(event)  
         });
+        if (socket && socket.readyState === 1) {
+            socket.send(JSON.stringify({ action: 'get-users', target: {name: room} }));
+        }
         function handleNewMessage(event) {
             let data = event.data
             data = data.split(/\r?\n/)
             console.log(data)
             for (let i = 0; i < data.length; i++) {
                 let msg =JSON.parse(data[i]);
-                const targetRoom = findRoom(msg.target.name);
-                if (typeof targetRoom !== 'undefined') {
-                    
-                    // console.log(targetRoom.messages);
-                    const appendedRoomMessage = rooms.map((room, i) => {
-                        if (room.name === targetRoom.name) {
-                            return {
-                                name: room.name,
-                                messages: [...room.messages, msg]
-                            }
-                        } else {
-                            return room;
+                switch (msg.action) {
+                    case "send-message": 
+                        const targetRoom = findRoom(msg.target.name);
+                        if (typeof targetRoom !== 'undefined') {
+                            
+                            // console.log(targetRoom.messages);
+                            const appendedRoomMessage = rooms.map((room, i) => {
+                                if (room.name === targetRoom.name) {
+                                    return {
+                                        name: room.name,
+                                        messages: [...room.messages, msg]
+                                    }
+                                } else {
+                                    return room;
+                                }
+                            });
+                            setRooms(appendedRoomMessage);
+                            console.log(rooms)
+                            
+                            // console.log(currentRoomMessages);
                         }
-                    });
-                    setRooms(appendedRoomMessage);
-                    console.log(rooms)
-                    
-                    // console.log(currentRoomMessages);
+                        break;
+                    case 'list-users': 
+                        console.log(msg);
+                        let users = msg.message.slice(1,-1);
+                        setRoomUsers(users.split(' '));
+                        
+                        break;
+                    default: 
+                        break;
                 }
+                
             }
         }
         function findRoom(name) {
@@ -60,8 +74,9 @@ const Messages = ({ socket, rooms, room, setRooms}) => {
         } else {
             //do something
         }
+        console.log(roomUsers);
         return () => socket.removeEventListener('message', handleNewMessage);
-    },[room, currentRoomMessages, socket, rooms]);
+    },[room, currentRoomMessages, rooms]);
 
 
     return (

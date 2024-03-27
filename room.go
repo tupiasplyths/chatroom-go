@@ -64,6 +64,25 @@ func (room *Room) notifyClientsJoined(client *Client) {
 	room.broadcastToRoom(message.encode())
 }
 
+func (room *Room) ListRoomsClients() {
+	var clients[] string
+	for client := range room.clients {
+		clients = append(clients, client.GetName())
+	}
+	message := &Message{
+		Action:  "list-users",
+		Target:  room,
+		Message: fmt.Sprintf("%s", clients),
+		Sender:  &Client{Name: "bot"},
+	}
+
+	for client := range room.clients {
+		client.send <- message.encode()
+	}
+	log.Println("sending users list")
+
+}
+
 func (room *Room) GetName() string {
 	return room.Name
 }

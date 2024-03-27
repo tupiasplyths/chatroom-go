@@ -31,15 +31,18 @@
     color: rgb(153, 217, 234);
   }
 
-  .usersTitle {
+  .userListTitle {
     font-size: 1.2rem;
     color: #fff;
+    margin-bottom: 10px;
+    position: relative;
+    left: -65px;
   }
   .usersList {
     list-style-type: none;
     padding-left: 0;
     margin-bottom: 60px;
-    color: rgb(153, 217, 234);
+    color: rgb(179, 210, 128);
   }
   .usersList li {
     margin-bottom: 12px;
@@ -95,19 +98,21 @@
     background-color: rgba(255, 255, 255, 1);
     border: 1px solid rgba(104, 85, 224, 1);
     /* align bottom */
-    position: relative;
-    bottom: -400px;
+    position: absolute;
+    bottom: 20px;
     left: 0;
   }
 
   .roomInput {
     padding: 4px;
     margin-right: 0px;
-    width: 90%;
+    /* width: 90%; */
     border-radius: 10px;
-    border: 1px solid rgb(153, 217, 234);
+    border: 1px solid rgb(153, 216, 234);
     font-size: 0.9rem;
-    position: relative;
-    bottom: -390px;
+    position: absolute;
+    bottom: 60px;
+    left:10px;
+
     /* left: 10px */
   }

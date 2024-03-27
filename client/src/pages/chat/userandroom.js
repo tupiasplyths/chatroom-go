@@ -2,8 +2,7 @@ import styles from './styles.module.css';
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const UsersAndRooms = ({ socket, username, rooms, room, setRooms, setRoom}) => {
-    const [roomUsers, setRoomUsers] = useState([]);
+const UsersAndRooms = ({ socket, rooms, room, setRooms, setRoom, roomUsers}) => {
     const navigate = useNavigate();
     const [roomsList, setRoomsList] = useState([]);
     const roomInput = useRef('');
@@ -29,10 +28,31 @@ const UsersAndRooms = ({ socket, username, rooms, room, setRooms, setRoom}) => {
         roomInput.current = ''
     }
 
+    // document.querySelector(#form).addEventListener('submit', (e) => {
+        
+    // })
+
+    useEffect(() => {
+        
+
+    },[room, rooms, socket]) 
+    
+    //TODO: fix the input, clear on submit
     return (
         <div className={styles.roomAndUsersColumn}> 
             <h2 className={styles.roomTitle}>{room}</h2>
-
+            <div>
+                {roomUsers.length > 0 && <h3 className={styles.userListTitle}>Users:</h3>}
+                <ul className={styles.usersList}>
+                    {roomUsers.map((user, i) => (
+                        <li key={i}>
+                            <span >
+                                {user}
+                            </span>
+                        </li>
+                    ))}
+                </ul>
+            </div>
             <div>
                 {rooms.length > 0 && <h3 className={styles.roomListTitle}>Rooms:</h3>}
                 <ul className={styles.roomsList}>
@@ -49,8 +69,8 @@ const UsersAndRooms = ({ socket, username, rooms, room, setRooms, setRoom}) => {
                 <form onSubmit={handleSubmit}>
                     <input 
                         className={styles.roomInput} placeholder='Type room name to join' 
-                        onChange={(e) => (roomInput.current = e.target.value)}
                         // value={roomInput.current}
+                        onChange={(e) => (roomInput.current = e.target.value)}
                     />
                     
                     <button className={styles.join} type='submit'>
