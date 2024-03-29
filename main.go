@@ -28,7 +28,7 @@ func main() {
 		// w.Header().Set("Content-Type", "application/json")
 		// w.Write([]byte(`{"clients":` + string(CountClients(WsServer)) + `}`))
 	})
-	log.Fatal(http.ListenAndServe(":3789", nil))
+	log.Fatal(http.ListenAndServe("0.0.0.0:3789", nil))
 }
 
 func enableCors(w *http.ResponseWriter) {
