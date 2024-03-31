@@ -1,10 +1,9 @@
 import styles from './styles.module.css';
-import { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
+// import { useNavigate } from 'react-router-dom';
 
 const UsersAndRooms = ({ socket, rooms, room, setRooms, setRoom, roomUsers}) => {
-    const navigate = useNavigate();
-    const [roomsList, setRoomsList] = useState([]);
+    // const navigate = useNavigate();
     const roomInput = useRef('');
 
     const leaveRoom = (roomName) => {

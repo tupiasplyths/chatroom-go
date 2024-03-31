@@ -1,10 +1,10 @@
 import styles from './styles.module.css';
 import { useState, useEffect } from 'react';
 
-const Messages = ({ socket, rooms, room, setRooms, roomUsers, setRoomUsers}) => {
+const Messages = ({ socket, rooms, room, setRooms, setRoomUsers, setAvailableRooms}) => {
     const [currentRoomMessages, setCurrentRoomMessages] = useState([]);
 
-    
+    let tmpRoom = rooms
     useEffect(() => {
         socket.addEventListener('message', messageHandle);
 
@@ -22,7 +22,7 @@ const Messages = ({ socket, rooms, room, setRooms, roomUsers, setRoomUsers}) => 
                     case "send-message": 
                         const targetRoom = findRoom(msg.target.name);
                         if (typeof targetRoom !== 'undefined') {
-                            const appendedRoomMessage = rooms.map((room, i) => {
+                            const appendedRoomMessage = tmpRoom.map((room, i) => {
                                 if (room.name === targetRoom.name) {
                                     return {
                                         name: room.name,
@@ -33,13 +33,18 @@ const Messages = ({ socket, rooms, room, setRooms, roomUsers, setRoomUsers}) => 
                                 }
                             });
                             setRooms(appendedRoomMessage);
-                            console.log(rooms)
+                            // console.log(rooms)
                         }
                         break;
                     case 'list-users': 
-                        console.log(msg);
+                        // console.log(msg);
                         let users = msg.message.slice(1,-1);
                         setRoomUsers(users.split(' '));
+                        console.log(users.split(' '));
+                        break;
+                    case 'list-rooms':
+                        let rooms = msg.message.slice(1,-1);
+                        setAvailableRooms(rooms.split(' '));
                         break;
                     default: 
                         break;
@@ -54,7 +59,6 @@ const Messages = ({ socket, rooms, room, setRooms, roomUsers, setRoomUsers}) => 
                         console.error(`rooms[${i}] is undefined`);
                         continue;
                     }
-            
                     if (rooms[i].name === name) {
                         console.log("found room " + name);
                         return rooms[i];
@@ -63,12 +67,14 @@ const Messages = ({ socket, rooms, room, setRooms, roomUsers, setRoomUsers}) => 
             }
         }
         const currentRoom = findRoom(room);
+        
+        //counter room[i] not defined
         if (currentRoom) {
             setCurrentRoomMessages(currentRoom.messages);
         } else {
             //do something
         }
-        console.log(roomUsers);
+        // console.log(roomUsers);
         return () => socket.removeEventListener('message', messageHandle);
     },[room, currentRoomMessages, rooms]);
 

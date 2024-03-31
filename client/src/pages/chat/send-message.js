@@ -1,7 +1,7 @@
 import styles from './styles.module.css';
 import React, { useState } from 'react';
 
-const SendMessage = ({ socket, username, room }) => {
+const SendMessage = ({ socket, room }) => {
     const [message, setMessage] = useState('');
 
     const sendMessage = () => {
@@ -21,6 +21,11 @@ const SendMessage = ({ socket, username, room }) => {
                 placeholder='Type a message...'
                 onChange={(e) => setMessage(e.target.value)}
                 value={message}
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                        sendMessage();
+                    }
+                }}
             />
 
             <button className='btn btn-primary' onClick={sendMessage}>

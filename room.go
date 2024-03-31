@@ -75,10 +75,10 @@ func (room *Room) ListRoomsClients() {
 		Message: fmt.Sprintf("%s", clients),
 		Sender:  &Client{Name: "bot"},
 	}
-
-	for client := range room.clients {
-		client.send <- message.encode()
-	}
+	room.broadcastToRoom(message.encode())
+	// for client := range room.clients {
+	// 	client.send <- message.encode()
+	// }
 	log.Println("sending users list")
 
 }

@@ -16,7 +16,7 @@ var upgrader = websocket.Upgrader{
 }
 var (
 	newline = []byte{'\n'}
-	space = []byte{' '}
+	// space = []byte{' '}
 )
 
 type Client struct {
@@ -167,8 +167,10 @@ func (client *Client) handleNewMessage(jsonMessage []byte) {
 			room.ListRoomsClients()
 		}
 		log.Println("re-list users")
+	case "get-rooms":
+		client.handleRoomListRequest()
 	}
-	
+
 }
 
 func (client *Client) handleJoinRoomMessage(message Message) {
@@ -188,4 +190,17 @@ func (client *Client) handleLeaveRoomMessage(message Message) {
 	delete(client.rooms, room)
 
 	room.unregister <- client
+}
+
+func (client *Client) handleRoomListRequest() {
+	var roomList []string
+	for room := range client.wsServer.rooms {
+		roomList = append(roomList, room.GetName())
+	}
+
+	message := &Message{
+		Action:  "list-rooms",
+		Message: fmt.Sprintf("%s", roomList),
+	}
+	client.send <- message.encode()
 }
