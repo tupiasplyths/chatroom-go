@@ -64,7 +64,3 @@ func (server *WsServer) createRoom(name string) *Room {
 
 	return room
 }
-
-// func (server *WsServer) CountClients(w http.ResponseWriter, r *http.Request) int {
-// 	return len(server.clients)
-// }
