@@ -1,5 +1,6 @@
 import styles from './styles.module.css';
 import { useEffect, useRef } from 'react';
+import { IoLogOutOutline } from "react-icons/io5";
 // import { useNavigate } from 'react-router-dom';
 
 const UsersAndRooms = ({ socket, rooms, room, setRooms, setRoom, roomUsers}) => {
@@ -11,6 +12,8 @@ const UsersAndRooms = ({ socket, rooms, room, setRooms, setRoom, roomUsers}) => 
             action: "leave-room",
             message: roomName
         }));
+
+        setRooms(rooms.filter(room => room.name !== roomName));
     }
 
     const switchRoom = (roomName) => {
@@ -27,19 +30,17 @@ const UsersAndRooms = ({ socket, rooms, room, setRooms, setRoom, roomUsers}) => 
         roomInput.current = ''
     }
 
-    // document.querySelector(#form).addEventListener('submit', (e) => {
-        
-    // })
-
     useEffect(() => {
         if (socket && socket.readyState === 1) {
             console.log("listing users")
             socket.send(JSON.stringify({ action: 'get-users', target: {name: room} }));
+            // socket.send(JSON.stringify({ action: 'get-rooms' }));
         }
 
     },[room, rooms, socket]) 
     
     //TODO: fix the input, clear on submit
+    //TODO: room search suggestion
     return (
         <div className={styles.roomAndUsersColumn}> 
             <h2 className={styles.roomTitle}>{room}</h2>
@@ -60,18 +61,20 @@ const UsersAndRooms = ({ socket, rooms, room, setRooms, setRoom, roomUsers}) => 
                 <ul className={styles.roomsList}>
                     {rooms.map((room, i) => (
                         <li key={i}>
-                            <button className={styles.leaveRoom} onClick={() => switchRoom(room.name)}>
+                            <button className={styles.roomsList} onClick={() => switchRoom(room.name)}>
                                 {room.name}
                             </button>
+
+                            <span className={styles.leaveRoomButton} onClick={() => leaveRoom(room.name)}><IoLogOutOutline/></span>
                         </li>
                     ))}
                 </ul>
             </div>
-            <div>
+            <div className={styles.bottomDiv}>
                 <form onSubmit={handleSubmit}>
                     <input 
                         className={styles.roomInput} placeholder='Type room name to join' 
-                        // value={roomInput.current}
+                        value={roomInput.current}
                         onChange={(e) => (roomInput.current = e.target.value)}
                     />
                     

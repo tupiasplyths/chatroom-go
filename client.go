@@ -189,7 +189,12 @@ func (client *Client) handleLeaveRoomMessage(message Message) {
 	room := client.wsServer.findRoomByName(message.Message)
 	delete(client.rooms, room)
 
+	// TODO: clean up rooms with no client every X seconds instead of cleanup on leave
 	room.unregister <- client
+	if (len(room.GetClients()) == 0) {
+		client.wsServer.rooms[room] = false
+		delete(client.wsServer.rooms, room)
+	}
 }
 
 func (client *Client) handleRoomListRequest() {

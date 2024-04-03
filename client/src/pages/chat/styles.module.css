@@ -1,20 +1,25 @@
 .chatContainer {
-    max-width: 1100px;
-    margin: 0 auto;
+  /* max-width: 1100px; */
+  margin: 0 auto;
     display: grid;
     grid-template-columns: 1fr 4fr;
     gap: 20px;
   }
   
   /* Room and users component */
+  
   .roomAndUsersColumn {
     border-right: 1px solid #dfdfdf;
+    display: flex;
+    flex-direction: column;
+    /* width:max-content; */
   }
   .roomTitle {
     margin-bottom: 60px;
     text-transform: uppercase;
     font-size: 2rem;
     color: #fff;
+    
   }
 
   .roomListTitle {
@@ -27,8 +32,12 @@
   .roomsList {
     list-style-type: none;
     padding-left: 0;
-    margin-bottom: 60px;
-    color: rgb(153, 217, 234);
+    margin-bottom: 6px;
+    color: rgb(0, 0, 0);
+  }
+
+  .leaveRoomButton {
+    cursor:pointer;
   }
 
   .userListTitle {
@@ -41,11 +50,48 @@
   .usersList {
     list-style-type: none;
     padding-left: 0;
-    margin-bottom: 60px;
-    color: rgb(179, 210, 128);
+    margin-bottom: 6px;
+    color: rgb(0, 184, 31);
+    min-height: 10px;
   }
   .usersList li {
     margin-bottom: 12px;
+  }
+
+  .bottomDiv {
+    flex-grow: 1;
+    /* display: block; */
+    /* position: absolute; */
+    bottom: 0;
+    left: 0;
+  }
+
+  .roomInput {
+    padding: 4px;
+    margin-right: 0px;
+    /* width: 90%; */
+    border-radius: 10px;
+    border: 1px solid rgb(153, 216, 234);
+    font-size: 0.9rem;
+    /* position: absolute; */
+    /* bottom: 60px;
+    left:10px; */
+    /* display: block; */
+    /* align-self: flex-end; */
+    /* vertical-align: bottom; */
+    /* left: 10px */
+  }
+  .join {
+    color: rgb(104, 85, 224);
+    background-color: rgba(255, 255, 255, 1);
+    border: 1px solid rgba(104, 85, 224, 1);
+    width: 60%;
+    /* align-self: flex-end; */
+    /* display: block; */
+    /* position: absolute; */
+    /* bottom: 20px;
+    left: 0; */
+    /* vertical-align: bottom; */
   }
   
   /* Messages */
@@ -69,6 +115,7 @@
     color: #fff;
   }
   
+  
   /* Message input and button */
   .sendMessageContainer {
     padding: 16px 20px 20px 16px;
@@ -76,7 +123,7 @@
   .messageInput {
     padding: 14px;
     margin-right: 16px;
-    width: 60%;
+    width: 90%;
     border-radius: 6px;
     border: 1px solid rgb(153, 217, 234);
     font-size: 0.9rem;
@@ -93,26 +140,3 @@
     transition: 0.4s;
   }
 
-  .join {
-    color: rgb(104, 85, 224);
-    background-color: rgba(255, 255, 255, 1);
-    border: 1px solid rgba(104, 85, 224, 1);
-    /* align bottom */
-    position: absolute;
-    bottom: 20px;
-    left: 0;
-  }
-
-  .roomInput {
-    padding: 4px;
-    margin-right: 0px;
-    /* width: 90%; */
-    border-radius: 10px;
-    border: 1px solid rgb(153, 216, 234);
-    font-size: 0.9rem;
-    position: absolute;
-    bottom: 60px;
-    left:10px;
-
-    /* left: 10px */
-  }
