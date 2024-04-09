@@ -3,6 +3,7 @@ import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/home';
 import Chat from './pages/chat'
+import Signup from './pages/account/signup'
 import { useState } from 'react';
 import { SocketProvider } from './wsContext';
 
@@ -38,7 +39,12 @@ function App() {
               </SocketProvider>
             }
           />
-
+          <Route path='/login'
+            element={
+              <Signup
+              />
+            }
+          />
         </Routes>
       </div>
     </Router>
