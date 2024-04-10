@@ -3,6 +3,7 @@ package main
 import (
 	// "flag"
 	// "fmt"
+	"fmt"
 	"log"
 	"net/http"
 )
@@ -12,6 +13,7 @@ func CountClients(server *WsServer) int {
 }
 
 func main() {
+	fmt.Println("server started")
 	WsServer := NewWebSocketServer()
 	go WsServer.Run()
 
@@ -23,6 +25,7 @@ func main() {
 		log.Println(CountClients(WsServer))
 	})
 	http.HandleFunc("/signup", signup)
+	http.HandleFunc("/login", login)
 	log.Fatal(http.ListenAndServe("0.0.0.0:3789", nil))
 }
 

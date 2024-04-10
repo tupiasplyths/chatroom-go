@@ -1,13 +1,14 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
-	"github.com/tupiasplyths/chatroom-server/hash"
-	db "github.com/tupiasplyths/chatroom-server/dbConnect"
 
-	
+	db "github.com/tupiasplyths/chatroom-server/dbConnect"
+	"github.com/tupiasplyths/chatroom-server/hash"
 )
 
 var database = db.DbConnect()
@@ -18,8 +19,11 @@ type User struct{
 	Email string `json:"email"`
 }
 
+type Response struct {
+	Message string `json:"message"`
+}
 
-func signup (w http.ResponseWriter, r *http.Request) {
+func signup(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	
 	var user User
@@ -31,17 +35,51 @@ func signup (w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	} 
-	rows, err := database.Query(`SELECT username FROM users WHERE username = $1`, user.Username)
+	rows, err := database.Query(`SELECT username FROM accounts WHERE username = $1`, user.Username)
 	if err != nil {
 		log.Fatal(err)
 	} 
 
 	if rows.Next() {
-		
+		log.Println("username already exists")
+		w.WriteHeader(http.StatusOK)
+		json.NewEncoder(w).Encode(&Response{Message: "username already exists"})
+		return
 	}
 
 	_, err = database.Query(`INSERT INTO accounts (username, email, password) VALUES ($1, $2, $3)`, user.Username, user.Email, hashedPassword )
 	if err != nil {
 		log.Fatal(err)
+	}
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(&Response{Message: "user created"})
+}
+
+func login(w http.ResponseWriter, r *http.Request) {
+	var user User
+	err := json.NewDecoder(r.Body).Decode(&user)
+	if err != nil {
+		log.Fatal(err)
+	}
+	var hashedPassword string
+	var flag bool
+	err = database.QueryRow(`SELECT password FROM accounts WHERE username = $1`, user.Username).Scan(&hashedPassword)
+	
+	if err == sql.ErrNoRows {
+		log.Print("no username matched")
+	} else if err != nil {
+		log.Print("row scanning error ")
+		log.Fatal(err)
+	} else {
+		flag = hash.CheckHash(user.Password, hashedPassword)
+		fmt.Printf("flag is %t\n", flag)
+	}
+
+	if flag {
+		w.WriteHeader(http.StatusOK)
+		json.NewEncoder(w).Encode(&Response{Message: "login success"})
+	} else {
+		w.WriteHeader(http.StatusOK)
+		json.NewEncoder(w).Encode(&Response{Message: "wrong username or password"})
 	}
 }
