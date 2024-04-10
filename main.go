@@ -21,7 +21,8 @@ func main() {
 	})
 	http.HandleFunc("/clientcount", func(w http.ResponseWriter, r *http.Request) {
 		log.Println(CountClients(WsServer))
-		})
+	})
+	http.HandleFunc("/signup", signup)
 	log.Fatal(http.ListenAndServe("0.0.0.0:3789", nil))
 }
 

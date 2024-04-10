@@ -1,4 +1,4 @@
-package main
+package dbConnect
 
 import (
 	"os"
@@ -17,7 +17,7 @@ func dbURL() string {
 	return url
 }
 
-func dbConnect() *sql.DB {
+func DbConnect() *sql.DB {
 	db, err := sql.Open("postgres", dbURL())
 	if err != nil {
 		log.Fatal(err)
