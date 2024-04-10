@@ -7,8 +7,6 @@ const Signup = () => {
     const [password, setPassword] = useState('');
     const email = useRef('');
     const power = createRef();
-    const [color, setColor] = useState('');
-    const [width, setWidth] = useState(''); 
     const handleLogin = (e) => {
         e.preventDefault();
 
@@ -54,8 +52,6 @@ const Signup = () => {
         
         power.current.style.width = widthPower[point]; 
         power.current.style.backgroundColor = colorPower[point]; 
-        setColor(colorPower[point]);
-        setWidth(widthPower[point]);
         console.log("width should be " + widthPower[point]);
     }
 
