@@ -1,15 +1,38 @@
 import { createRef, useRef, useState } from "react";
 import styles from './styles.module.css';
+import { useNavigate } from 'react-router-dom';
 
 const Signup = () => {
+    //TODO: notif when signup and login
+    const navigate = useNavigate();
     const username = useRef('');
-    // const password = useRef('');
+    const loginPassword = useRef('');
     const [password, setPassword] = useState('');
     const email = useRef('');
     const power = createRef();
     const handleLogin = (e) => {
         e.preventDefault();
-
+        let check = false;
+        fetch("http://localhost:3789/login", {
+            method: "POST",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username: username.current,
+                password: password
+            })
+        }).then((res) => res.json()).then((data) => {
+            console.log(data.message + " " + typeof(data.message));
+            if (data.message === 'login success') {
+                check = true;
+            }
+            console.log("check is " + check)
+            if (check) {
+                navigate('/', { replace: true });
+            }
+        }).catch((err) => console.log(err));
     }
 
     const handleSignup = (e) => {
@@ -26,17 +49,12 @@ const Signup = () => {
                 password: password,
                 email: email.current
             })
-        }).then((res) => {
-            if (res.status !== 200) {
-            }   
-            console.log(res);
-            
-        })
+        }).then((res) => res.json()).then((data) => {
+            console.log(data);
+        }).catch((err) => console.log(err));
     }
     const passwordStrengthCheck = (e) => {
-        setPassword(e.target.value);
-        // console.log("current length " + password.length + " actual text " + password + "\n vs text received: " + e.target.value)
-        let pwd = e.target.value
+        setPassword(e.target.value);let pwd = e.target.value
         let point = 0;
         let widthPower = ["1%", "25%", "50%", "75%", "100%"]; 
         let colorPower = ["#D73F40", "#DC6551", "#F2B84F", "#BDE952", "#3ba62f"]; 
@@ -70,10 +88,6 @@ const Signup = () => {
                         <input 
                             type="password" name="pswd" 
                             placeholder="Password" required 
-                            // onChange={(e) => {
-                            //     // setPassword(e.target.value)
-                            //     passwordStrengthCheck(e);
-                            // }}
                             onInput={passwordStrengthCheck}
                             value={password}
                         />
@@ -89,8 +103,7 @@ const Signup = () => {
                         <label htmlFor={styles.chk} aria-hidden="true">Login</label>
                         <br></br><br/>
                         <input type="text" name="username" placeholder="Username" required onChange={(e) => username.current = e.target.value}/>
-                        <input type="password" name="pswd" placeholder="Password" required onChange={(e) => password.current = e.target.value}/>
-                        {/* <Password className={styles.password} value={password} onChange={(e) => setPassword(e.target.value)} /> */}
+                        <input type="password" name="pswd" placeholder="Password" required onChange={(e) => loginPassword.current = e.target.value}/>
                         <button>Login</button>
                     </form>
                 </div>

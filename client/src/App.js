@@ -24,12 +24,8 @@ function App() {
           element={
             <Home 
               username = {username}              
-              // room = {room}
-              // socket = {socket}
               onUsernameChange={onUsernameChange}
-              // onRoomNameChange={onRoomNameChange}
               setUsername={setUsername}
-              // onNameBeingDone={onNameBeingDone}
             />} 
           />
           <Route path='/chat' 

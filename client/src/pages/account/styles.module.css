@@ -79,7 +79,7 @@
 .login label{
 	padding-top: 10px;
 	color: #573b8a;
-	transform: scale(.6); 
+	transform: scale(.65); 
 }
 
 #chk:checked ~ .login{

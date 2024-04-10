@@ -13,19 +13,19 @@ const Home = ({ username, onUsernameChange, setUsername}) => {
 
     return (
         <div className={styles.container}>
-        <div className={styles.formContainer}>
-            <h1>{`<>DevRooms</>`}</h1>
-            <input className={styles.input} placeholder='Username' onChange={(e) => handleUsernameChange(e.target.value)}/>
+            <div className={styles.formContainer}>
+                <h1>{`<>DevRooms</>`}</h1>
+                <input className={styles.input} placeholder='Username' onChange={(e) => handleUsernameChange(e.target.value)}/>
 
-            <button 
-                className='btn btn-secondary' style={{ width: '100%' }}
-                onClick={(e) => joinChat(e.target.value)}
-            >
-                Join Chat
-            </button>
+                <button 
+                    className='btn btn-secondary' style={{ width: '100%' }}
+                    onClick={(e) => joinChat(e.target.value)}
+                >
+                    Join Chat
+                </button>
 
-            <p>Sign up <a href='/login'>here</a> first</p>
-        </div>
+                <p>Sign up <a href='/login'>here</a> first</p>
+            </div>
         </div>
     );
 };
