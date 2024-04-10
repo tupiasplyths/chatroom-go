@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext } from "react";
 
 export const WebSocketContext = createContext(null);
 

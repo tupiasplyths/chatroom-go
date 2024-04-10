@@ -73,9 +73,10 @@ const UsersAndRooms = ({ socket, rooms, room, setRooms, setRoom, roomUsers}) => 
             <div className={styles.bottomDiv}>
                 <form onSubmit={handleSubmit}>
                     <input 
-                        className={styles.roomInput} placeholder='Type room name to join' 
-                        value={roomInput.current}
+                        className={styles.roomInput} 
+                        placeholder='Type room name to join' 
                         onChange={(e) => (roomInput.current = e.target.value)}
+                        value={roomInput.current}
                     />
                     
                     <button className={styles.join} type='submit'>
