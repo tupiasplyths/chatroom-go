@@ -1,6 +1,6 @@
 import { createContext, useContext } from "react";
-import dotenv from 'dotenv';
-dotenv.config();
+// import dotenv from 'dotenv';
+// dotenv.config();
 export const WebSocketContext = createContext(null);
 const backend_url = process.env.BACKEND_URL; 
 export const SocketProvider = ({ children, username }) => {
