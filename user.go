@@ -24,6 +24,7 @@ type Response struct {
 }
 
 func signup(w http.ResponseWriter, r *http.Request) {
+	enableCors(&w)
 	w.Header().Set("Content-Type", "application/json")
 	
 	var user User
@@ -56,6 +57,7 @@ func signup(w http.ResponseWriter, r *http.Request) {
 }
 
 func login(w http.ResponseWriter, r *http.Request) {
+	enableCors(&w)
 	var user User
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
