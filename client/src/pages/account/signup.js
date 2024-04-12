@@ -21,7 +21,7 @@ const Signup = () => {
             },
             body: JSON.stringify({
                 username: username.current,
-                password: password
+                password: loginPassword.current
             })
         }).then((res) => res.json()).then((data) => {
             console.log(data.message + " " + typeof(data.message));
