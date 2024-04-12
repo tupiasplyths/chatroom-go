@@ -41,7 +41,6 @@ const UsersAndRooms = ({ socket, rooms, room, setRooms, setRoom, roomUsers}) => 
 
     },[room, rooms, socket]) 
     
-    //TODO: fix the input, clear on submit
     //TODO: room search suggestion
     return (
         <div className={styles.roomAndUsersColumn}> 
