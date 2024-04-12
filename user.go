@@ -30,15 +30,15 @@ func signup(w http.ResponseWriter, r *http.Request) {
 	var user User
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("decode error: ", err)
 	}
 	hashedPassword, err := hash.HashString(user.Password)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("hashin error: ", err)
 	} 
 	rows, err := database.Query(`SELECT username FROM accounts WHERE username = $1`, user.Username)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("select query error: ", err)
 	} 
 
 	if rows.Next() {
@@ -50,7 +50,7 @@ func signup(w http.ResponseWriter, r *http.Request) {
 
 	_, err = database.Query(`INSERT INTO accounts (username, email, password) VALUES ($1, $2, $3)`, user.Username, user.Email, hashedPassword )
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("query error: ", err)
 	}
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(&Response{Message: "user created"})
@@ -62,7 +62,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 	var user User
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("decode error: ", err)
 	}
 
 	var hashedPassword string

@@ -16,7 +16,6 @@ func dbURL() string {
 	dbName := os.Getenv("DB_NAME")
 	dbAddress := os.Getenv("DB_ADDRESS")
 	dbPort := os.Getenv("DB_PORT")
-	// url := "postgresql://" + dbUsername + ":" + dbPassword + "@(" + dbAddress + ")/" + dbName + "?sslmode=disable"
 	url := fmt.Sprintf(
 		"host=%s user=%s port=%s password=%s dbname=%s sslmode=disable", 
 		dbAddress, dbUsername, dbPort, dbPassword, dbName)
@@ -26,7 +25,7 @@ func dbURL() string {
 func DbConnect() *sql.DB {
 	db, err := sql.Open("postgres", dbURL())
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("sql error: ", err)
 	}  
 	log.Println("db connected")
 	return db
