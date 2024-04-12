@@ -1,6 +1,7 @@
 import { createRef, useRef, useState } from "react";
 import styles from './styles.module.css';
 import { useNavigate } from 'react-router-dom';
+const backend_url = "http://" + process.env.REACT_APP_BACKEND_URL + ":" + process.env.REACT_APP_BACKEND_PORT; 
 
 const Signup = () => {
     //TODO: notif when signup and login
@@ -13,7 +14,7 @@ const Signup = () => {
     const handleLogin = (e) => {
         e.preventDefault();
         let check = false;
-        fetch("http://localhost:3789/login", {
+        fetch(backend_url + "/login", {
             method: "POST",
             headers: {
                 "Accept": "application/json",
@@ -38,7 +39,7 @@ const Signup = () => {
     const handleSignup = (e) => {
         e.preventDefault();
 
-        fetch("http://localhost:3789/signup", {
+        fetch(backend_url + "/signup", {
             method: "POST",
             headers: {
                 "Accept": "application/json",
