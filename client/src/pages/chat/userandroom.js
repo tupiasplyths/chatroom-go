@@ -1,11 +1,12 @@
 import styles from './styles.module.css';
-import { useEffect, useRef } from 'react';
+import { createRef, useEffect, useRef } from 'react';
 import { IoLogOutOutline } from "react-icons/io5";
 // import { useNavigate } from 'react-router-dom';
 
 const UsersAndRooms = ({ socket, rooms, room, setRooms, setRoom, roomUsers}) => {
     // const navigate = useNavigate();
     const roomInput = useRef('');
+    const roomInputField = createRef();
 
     const leaveRoom = (roomName) => {
         socket.send(JSON.stringify({
@@ -24,10 +25,11 @@ const UsersAndRooms = ({ socket, rooms, room, setRooms, setRoom, roomUsers}) => 
         e.preventDefault();
         socket.send(JSON.stringify({ action: 'join-room', message: roomInput.current }));
   
-        setRooms([...rooms, { name: roomInput.current, messages: [] }])
+        setRooms([...rooms, { name: roomInput.current, messages: [] }]);
         console.log("trying to join room " + roomInput.current + "....");
         console.log("currently joined rooms: " + ++rooms.length);
-        roomInput.current = ''
+        roomInput.current = '';
+        roomInputField.current.value = '';
     }
 
     useEffect(() => {
@@ -76,7 +78,7 @@ const UsersAndRooms = ({ socket, rooms, room, setRooms, setRoom, roomUsers}) => 
                         className={styles.roomInput} 
                         placeholder='Type room name to join' 
                         onChange={(e) => (roomInput.current = e.target.value)}
-                        value={roomInput.current}
+                        ref={roomInputField}
                     />
                     
                     <button className={styles.join} type='submit'>
