@@ -1,3 +1,5 @@
 chatroom-server
 .env
 chatroom-server.*
+*.onnx
+channelIDs.txt

@@ -1,0 +1,29 @@
+.channelList {
+    /* display: flex;
+    flex-direction: row; */
+    display: block;
+    /* flex-wrap: wrap; */
+    justify-content: space-between;
+    align-items: center;
+    margin: 0;
+}
+.card {
+    display: block;
+    /* left: 100px; */
+    ;
+}   
+
+.channelName {
+    
+}
+
+li {
+    list-style: none;
+    display: inline ;
+    height: 125px;
+    /* width: 40%; */
+}
+
+.reloadIcon {
+    cursor: pointer;
+}

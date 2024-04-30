@@ -6,7 +6,7 @@ import Chat from './pages/chat'
 import Signup from './pages/account/signup'
 import { useState } from 'react';
 import { SocketProvider } from './wsContext';
-
+import Holodex from './pages/holodex';
 
 function App() {
   const [username, setUsername] = useState('default');
@@ -26,6 +26,11 @@ function App() {
               username = {username}              
               onUsernameChange={onUsernameChange}
               setUsername={setUsername}
+            />} 
+          />
+          <Route path='/holodex' 
+          element={
+            <Holodex
             />} 
           />
           <Route path='/chat' 
