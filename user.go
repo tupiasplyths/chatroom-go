@@ -66,6 +66,11 @@ func login(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println("ERROR: decode error: ", err)
 	}
+	if user.Username == "" {
+		w.WriteHeader(http.StatusOK)
+		json.NewEncoder(w).Encode(&Response{Message: "username is empty"})
+		return
+	}
 
 	var hashedPassword string
 	var flag bool
