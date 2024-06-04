@@ -31,7 +31,7 @@ const Signup = () => {
             }
             console.log("check is " + check)
             if (check) {
-                navigate('/', { replace: true });
+                navigate('/home', { replace: true });
             }
         }).catch((err) => console.log(err));
     }
