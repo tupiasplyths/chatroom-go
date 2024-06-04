@@ -8,6 +8,7 @@ const LiveChannels = ({ channeljson }) => {
 
     const reloadComponent = () => {
         setReload((prev) => prev + 1);
+        console.log('reload triggered');
     }
     useEffect(() => {
         if (!channeljson) return
@@ -48,4 +49,4 @@ const LiveChannels = ({ channeljson }) => {
     )
 }
 
-export default LiveChannels
+export default LiveChannels;

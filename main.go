@@ -3,12 +3,16 @@ package main
 import (
 	// "flag"
 	// "fmt"
+	"os"
+	"github.com/joho/godotenv"
 	"fmt"
 	"log"
 	"net/http"
 )
 
 func main() {
+	godotenv.Load(".env")
+	listen_address := "0.0.0.0:" + os.Getenv("LISTEN_PORT")
 	fmt.Println("server started")
 	WsServer := NewWebSocketServer()
 	go WsServer.Run()
@@ -23,5 +27,5 @@ func main() {
 	http.HandleFunc("/signup", signup)
 	http.HandleFunc("/login", login)
 	http.HandleFunc("/api/channelID", returnChannelID)
-	log.Fatal(http.ListenAndServe("0.0.0.0:3789", nil))
+	log.Fatal(http.ListenAndServe(listen_address, nil))
 }

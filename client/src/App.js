@@ -20,7 +20,7 @@ function App() {
     <Router>
       <div className="App">
         <Routes>
-          <Route path='/' 
+          <Route path='/home' 
           element={
             <Home 
               username = {username}              
@@ -40,7 +40,7 @@ function App() {
               </SocketProvider>
             }
           />
-          <Route path='/login'
+          <Route path='/'
             element={
               <Signup
               />
