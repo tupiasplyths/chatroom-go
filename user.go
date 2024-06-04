@@ -29,6 +29,7 @@ func signup(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	
 	var user User
+	fmt.Println(r.Body)
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
 		log.Fatal("decode error: ", err)

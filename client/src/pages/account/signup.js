@@ -38,7 +38,8 @@ const Signup = () => {
 
     const handleSignup = (e) => {
         e.preventDefault();
-
+        // console.log("info " + username.current, password, email.current);
+        console.log(JSON.stringify({ username: username.current, password: password, email: email.current }));
         fetch(backend_url + "/signup", {
             method: "POST",
             headers: {

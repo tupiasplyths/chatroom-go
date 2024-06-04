@@ -28,7 +28,7 @@ const LiveChannels = ({ channeljson }) => {
             <IoReloadSharp onClick={reloadComponent} className={styles.reloadIcon}/>
             {channels.length > 0 && channels.map((channel, i) => (
                 <div className={styles.card} key={i}>
-                    <div className="card-body">
+                    <div className={styles.cardBody}>
                         <li>
                             <img 
                                 src={channel.channel.photo} 

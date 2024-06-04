@@ -4,7 +4,7 @@
     display: block;
     /* flex-wrap: wrap; */
     justify-content: space-between;
-    align-items: center;
+    align-items: start;
     margin: 0;
 }
 .card {
@@ -13,8 +13,14 @@
     ;
 }   
 
+.cardBody {
+    /* display: flex; */
+    justify-content: end;
+}
+
 .channelName {
-    
+    display: flex;
+    text-align: end;
 }
 
 li {
