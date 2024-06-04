@@ -54,7 +54,7 @@ const Holodex = () => {
 
     
     return (
-        <div className={styles.container}>
+        <div className={styles.container}>  
             <h1>Holodex</h1>
             <LiveChannels 
                 channeljson = {channelData}

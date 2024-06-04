@@ -32,19 +32,19 @@ func signup(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.Body)
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
-		log.Fatal("decode error: ", err)
+		log.Println("ERROR: json decode error: ", err)
 	}
 	hashedPassword, err := hash.HashString(user.Password)
 	if err != nil {
-		log.Fatal("hashin error: ", err)
+		log.Println("ERROR: hashing error: ", err)
 	} 
 	rows, err := database.Query(`SELECT username FROM accounts WHERE username = $1`, user.Username)
 	if err != nil {
-		log.Fatal("select query error: ", err)
+		log.Println("ERROR: select query error: ", err)
 	} 
 
 	if rows.Next() {
-		log.Println("username already exists")
+		log.Println("WARNING:username already exists")
 		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(&Response{Message: "username already exists"})
 		return
@@ -52,7 +52,7 @@ func signup(w http.ResponseWriter, r *http.Request) {
 
 	_, err = database.Query(`INSERT INTO accounts (username, email, password) VALUES ($1, $2, $3)`, user.Username, user.Email, hashedPassword )
 	if err != nil {
-		log.Fatal("query error: ", err)
+		log.Println("ERROR: query error: ", err)
 	}
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(&Response{Message: "user created"})
@@ -64,7 +64,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 	var user User
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
-		log.Fatal("decode error: ", err)
+		log.Println("ERROR: decode error: ", err)
 	}
 
 	var hashedPassword string
@@ -72,10 +72,10 @@ func login(w http.ResponseWriter, r *http.Request) {
 	err = database.QueryRow(`SELECT password FROM accounts WHERE username = $1`, user.Username).Scan(&hashedPassword)
 	
 	if err == sql.ErrNoRows {
-		log.Print("no username matched")
+		log.Println("no username matched")
 	} else if err != nil {
-		log.Print("row scanning error ")
-		log.Fatal(err)
+		log.Print("ERROR: row scanning error ")
+		log.Println(err)
 	} else {
 		flag = hash.CheckHash(user.Password, hashedPassword)
 		fmt.Printf("flag is %t\n", flag)
