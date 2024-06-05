@@ -39,6 +39,6 @@ func main() {
 	http.HandleFunc("/signup", signup)
 	http.HandleFunc("/login", login)
 	http.HandleFunc("/api/channelID", returnChannelID)
-	http.HandleFunc("/api/authenicate", authenicate)
+	http.HandleFunc("/api/authenticate", authenicate)
 	log.Fatal(http.ListenAndServe(listen_address, nil))
 }

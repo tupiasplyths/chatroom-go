@@ -9,6 +9,7 @@ import (
 
 	// "github.com/google/uuid"
 	// "github.com/gorilla/sessions"
+	"github.com/gorilla/sessions"
 	"github.com/tupiasplyths/chatroom-server/hash"
 )
 
@@ -109,7 +110,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 	// http.SetCookie(w, cookie)
 	session.Values["authenticated"] = true
 	session.Values["username"] = user.Username
-	if err := session.Save(r, w); err != nil {
+	if err := sessions.Save(r, w); err != nil {
 		log.Println("ERROR: saving session error: ", err)
 	}
 	json.NewEncoder(w).Encode(&Response{Message: "login success"})
