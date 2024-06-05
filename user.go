@@ -9,7 +9,6 @@ import (
 
 	// "github.com/google/uuid"
 	// "github.com/gorilla/sessions"
-	// "github.com/gorilla/sessions"
 	"github.com/tupiasplyths/chatroom-server/hash"
 )
 
