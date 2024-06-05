@@ -110,7 +110,8 @@ func login(w http.ResponseWriter, r *http.Request) {
 	// http.SetCookie(w, cookie)
 	session.Values["authenticated"] = true
 	session.Values["username"] = user.Username
-	if err := sessions.Save(r, w); err != nil {
+	session.Save(r, w)
+	if err != nil {
 		log.Println("ERROR: saving session error: ", err)
 	}
 	json.NewEncoder(w).Encode(&Response{Message: "login success"})
