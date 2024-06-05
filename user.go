@@ -7,11 +7,12 @@ import (
 	"log"
 	"net/http"
 
-	db "github.com/tupiasplyths/chatroom-server/dbConnect"
+	// "github.com/google/uuid"
+	// "github.com/gorilla/sessions"
 	"github.com/tupiasplyths/chatroom-server/hash"
 )
 
-var database = db.DbConnect()
+
 
 type User struct{
 	Username string `json:"username"`
@@ -61,8 +62,13 @@ func signup(w http.ResponseWriter, r *http.Request) {
 func login(w http.ResponseWriter, r *http.Request) {
 	enableCors(&w)
 	w.Header().Set("Content-Type", "application/json")
+	session, err := store.Get(r, "chatroom_session")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	var user User
-	err := json.NewDecoder(r.Body).Decode(&user)
+	err = json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
 		fmt.Println(r.Body)
 		log.Println("ERROR: decode error: ", err)
@@ -86,12 +92,42 @@ func login(w http.ResponseWriter, r *http.Request) {
 		flag = hash.CheckHash(user.Password, hashedPassword)
 		fmt.Printf("flag is %t\n", flag)
 	}
-
-	if flag {
+	if !flag {
 		w.WriteHeader(http.StatusOK)
-		json.NewEncoder(w).Encode(&Response{Message: "login success"})
+		session.Values["authenticated"] = false
+		json.NewEncoder(w).Encode(&Response{Message: "wrong username or password"})
+		return		
+	}
+	w.WriteHeader(http.StatusOK)
+	// cookie := sessions.NewCookie(
+	// 	"chatroom_session", 
+	// 	uuid.NewString(), 
+	// 	&sessions.Options{
+	// 		MaxAge: 300,
+	// 	},
+	// )
+	// http.SetCookie(w, cookie)
+	session.Values["authenticated"] = true
+	session.Values["username"] = user.Username
+	if err := session.Save(r, w); err != nil {
+		log.Println("ERROR: saving session error: ", err)
+	}
+	json.NewEncoder(w).Encode(&Response{Message: "login success"})
+}
+
+func authenicate(w http.ResponseWriter, r *http.Request) {
+	enableCors(&w)
+	w.Header().Set("Content-Type", "application/json")
+	session, err := store.Get(r, "chatroom_session")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if session.Values["authenticated"] == true {
+		w.WriteHeader(http.StatusOK)
+		json.NewEncoder(w).Encode(&Response{Message: "authenticated"})
 	} else {
 		w.WriteHeader(http.StatusOK)
-		json.NewEncoder(w).Encode(&Response{Message: "wrong username or password"})
+		json.NewEncoder(w).Encode(&Response{Message: "not authenticated"})
 	}
 }

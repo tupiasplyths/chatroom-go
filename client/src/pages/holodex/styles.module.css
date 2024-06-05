@@ -14,13 +14,11 @@
 
     align-items: center;
 }   
-
 .cardBody {
     margin-top: 20px;
     display: inline-block;
     justify-content: end;
 }
-
 .channelName {
     display: flex;
     text-shadow: 1px 1px 0.5px #000;
@@ -30,14 +28,12 @@
     font-weight: 400;
     font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
-
 li {
     list-style: none;
     display: inline-flex ;
     height: 125px;
     /* width: 40%; */
 }
-
 .reloadIcon {
     cursor: pointer;
 }

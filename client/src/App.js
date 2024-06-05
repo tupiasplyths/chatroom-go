@@ -1,10 +1,11 @@
 // import logo from './logo.svg';
-import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useState } from 'react';
+
+import './App.css';
 import Home from './pages/home';
 import Chat from './pages/chat'
 import Signup from './pages/account/signup'
-import { useState } from 'react';
 import { SocketProvider } from './wsContext';
 import Holodex from './pages/holodex';
 
@@ -22,10 +23,8 @@ function App() {
         <Routes>
           <Route path='/home' 
           element={
-            <Home 
-              username = {username}              
+            <Home             
               onUsernameChange={onUsernameChange}
-              setUsername={setUsername}
             />} 
           />
           <Route path='/holodex' 
@@ -42,8 +41,7 @@ function App() {
           />
           <Route path='/'
             element={
-              <Signup
-              />
+              <Signup />
             }
           />
         </Routes>

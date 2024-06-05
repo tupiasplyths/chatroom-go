@@ -4,17 +4,28 @@ import { useEffect, useState } from 'react';
 import SendMessage from './send-message';
 import UsersAndRooms from './userandroom';
 import { useSocket } from '../../wsContext';
+import useCookies from 'react-cookie';
+import { useNavigate } from 'react-router-dom';
 
 // const socket = new WebSocket("ws://localhost:3789/ws?name=abc");
 
 const Chat = ({ username }) => {
+    const navigate = useNavigate();
     const [room, setRoom] = useState('');
     const [rooms, setRooms] = useState([]);
     const socket = useSocket();
     const [roomUsers, setRoomUsers] = useState([]);
     const [availableRooms, setAvailableRooms] = useState([]);
+    const [cookies] = useCookies(['chatroom_session']);
     
     useEffect(() => {
+        if (!cookies.chatroom_session) {
+            console.log("no cookies");
+        }
+        if (!cookies.chatroom_session.authenticated) {
+            console.log("not authenticated");
+            navigate('/', { replace:true });
+        }
         if (socket.readyState !== 1) {
             console.log("socket not ready")
             setTimeout(() => { }, 5000);
@@ -26,8 +37,6 @@ const Chat = ({ username }) => {
         return () => socket.close(1000, "closed");
     }, []);
 
-    
-    
     return (
         <div className={styles.chatContainer}>
             <UsersAndRooms 

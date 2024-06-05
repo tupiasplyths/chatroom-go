@@ -1,17 +1,29 @@
 package main
 
 import (
-	// "flag"
-	// "fmt"
 	"os"
-	"github.com/joho/godotenv"
 	"fmt"
 	"log"
 	"net/http"
+
+	"github.com/joho/godotenv"
+	"github.com/gorilla/sessions"
+
+	db "github.com/tupiasplyths/chatroom-server/dbConnect"
+)
+
+var (
+	_ = godotenv.Load(".env")
+	database = db.DB_Connect()
+	key = []byte(os.Getenv("SESSION_KEY"))
+	store = sessions.NewCookieStore(key)
 )
 
 func main() {
-	godotenv.Load(".env")
+	store.Options = &sessions.Options{
+		Domain: "localhost",
+		MaxAge: 300,
+	}
 	listen_address := "0.0.0.0:" + os.Getenv("LISTEN_PORT")
 	fmt.Println("server started")
 	WsServer := NewWebSocketServer()
@@ -27,5 +39,6 @@ func main() {
 	http.HandleFunc("/signup", signup)
 	http.HandleFunc("/login", login)
 	http.HandleFunc("/api/channelID", returnChannelID)
+	http.HandleFunc("/api/authenicate", authenicate)
 	log.Fatal(http.ListenAndServe(listen_address, nil))
 }

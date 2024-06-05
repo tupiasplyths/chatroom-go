@@ -22,7 +22,7 @@ func dbURL() string {
 	return url
 }
 
-func DbConnect() *sql.DB {
+func DB_Connect() *sql.DB {
 	db, err := sql.Open("postgres", dbURL())
 	if err != nil {
 		log.Fatal("sql error: ", err)
