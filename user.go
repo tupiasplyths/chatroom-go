@@ -7,8 +7,8 @@ import (
 	"log"
 	"net/http"
 
-	// "github.com/google/uuid"
-	// "github.com/gorilla/sessions"
+	"github.com/google/uuid"
+	"github.com/gorilla/sessions"
 	"github.com/tupiasplyths/chatroom-server/hash"
 )
 
@@ -99,14 +99,14 @@ func login(w http.ResponseWriter, r *http.Request) {
 		return		
 	}
 	w.WriteHeader(http.StatusOK)
-	// cookie := sessions.NewCookie(
-	// 	"chatroom_session", 
-	// 	uuid.NewString(), 
-	// 	&sessions.Options{
-	// 		MaxAge: 300,
-	// 	},
-	// )
-	// http.SetCookie(w, cookie)
+	cookie := sessions.NewCookie(
+		"chatroom_session", 
+		uuid.NewString(), 
+		&sessions.Options{
+			MaxAge: 300,
+		},
+	)
+	http.SetCookie(w, cookie)
 	session.Values["authenticated"] = true
 	session.Values["username"] = user.Username
 	session.Save(r, w)
