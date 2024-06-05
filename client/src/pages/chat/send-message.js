@@ -2,37 +2,37 @@ import styles from './styles.module.css';
 import React, { useState } from 'react';
 
 const SendMessage = ({ socket, room }) => {
-    const [message, setMessage] = useState('');
+	const [message, setMessage] = useState('');
 
-    const sendMessage = () => {
-        if (message !== '') {
-            // const __createdtime__ = Date.now();
+	const sendMessage = () => {
+		if (message !== '') {
+			// const __createdtime__ = Date.now();
 
-            socket.send(JSON.stringify({ action: "send-message", message: message, target: {name: room} }));
-            console.log('Message sent: ', message);
-            setMessage('');
-        }
-    };
+			socket.send(JSON.stringify({ action: "send-message", message: message, target: {name: room} }));
+			console.log('Message sent: ', message);
+			setMessage('');
+		}
+	};
 
-    return (
-        <div className={styles.sendMessageContainer}>
-            <input 
-                className={styles.sendMessageContainer}
-                placeholder='Type a message...'
-                onChange={(e) => setMessage(e.target.value)}
-                value={message}
-                onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                        sendMessage();
-                    }
-                }}
-            />
+	return (
+		<div className={styles.sendMessageContainer}>
+			<input 
+				className={styles.sendMessageContainer}
+				placeholder='Type a message...'
+				onChange={(e) => setMessage(e.target.value)}
+				value={message}
+				onKeyDown={(e) => {
+					if (e.key === 'Enter') {
+						sendMessage();
+					}
+				}}
+			/>
 
-            <button className='btn btn-primary' onClick={sendMessage}>
-                Send
-            </button>
-        </div>
-    )
+			<button className='btn btn-primary' onClick={sendMessage}>
+				Send
+			</button>
+		</div>
+	)
 }
 
 export default SendMessage;
