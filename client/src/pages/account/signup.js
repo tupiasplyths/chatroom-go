@@ -11,8 +11,16 @@ const Signup = () => {
     const [password, setPassword] = useState('');
     const email = useRef('');
     const power = createRef();
+    const [checked, setChecked] = useState(false); 
+    const [warning, setWarning] = useState('');
+    const [signupWarning, setSignupWarning] = useState('');
     const handleLogin = (e) => {
         e.preventDefault();
+        let jsonbody = JSON.stringify({
+            username: username.current,
+            password: loginPassword.current
+        })
+        console.log(jsonbody);
         let check = false;
         fetch(backend_url + "/login", {
             method: "POST",
@@ -20,15 +28,14 @@ const Signup = () => {
                 "Accept": "application/json",
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({
-                username: username.current,
-                password: loginPassword.current
-            })
+            body: jsonbody
         }).then((res) => res.json()).then((data) => {
             console.log(data.message + " " + typeof(data.message));
-            if (data.message === 'login success') {
-                check = true;
+            if (data.message !== 'login success') {
+                setWarning(data.message);
+                return;
             }
+            check = true;
             console.log("check is " + check)
             if (check) {
                 navigate('/home', { replace: true });
@@ -52,11 +59,17 @@ const Signup = () => {
                 email: email.current
             })
         }).then((res) => res.json()).then((data) => {
-            console.log(data);
+            setSignupWarning(data.message);
+            if (data.message === 'user created') {
+                setTimeout(() => {
+                    setChecked(!checked);
+                }, 1000);
+            }
         }).catch((err) => console.log(err));
     }
     const passwordStrengthCheck = (e) => {
-        setPassword(e.target.value);let pwd = e.target.value
+        setPassword(e.target.value);
+        let pwd = e.target.value;
         let point = 0;
         let widthPower = ["1%", "25%", "50%", "75%", "100%"]; 
         let colorPower = ["#D73F40", "#DC6551", "#F2B84F", "#BDE952", "#3ba62f"]; 
@@ -76,41 +89,43 @@ const Signup = () => {
     }
 
     return (
-        <div className={styles.body}>
-            <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet"></link>
-            <div className={styles.main}>  	
-                <input type="checkbox" id={styles.chk} aria-hidden="true"/>
+    <div className={styles.body}>
+        <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet"></link>
+        <div className={styles.main}>  	
+            <input type="checkbox" id={styles.chk} aria-hidden="true" checked={checked} onClick={() => setChecked(!checked)}/>
 
-                <div className={styles.signup}>
-                    <form onSubmit={handleSignup}>
-                        <label htmlFor={styles.chk} aria-hidden="true">Sign up</label>
-                        <br></br><br/>
-                        <input type="text" name="txt" placeholder="Username" required onChange={(e) => username.current = e.target.value}/>
-                        <input type="email" name="email" placeholder="Email" required onChange={(e) => email.current = e.target.value}/>
-                        <input 
-                            type="password" name="pswd" 
-                            placeholder="Password" required 
-                            onInput={passwordStrengthCheck}
-                            value={password}
-                        />
-                        <div className={styles.powercontainer}>
-                            <div className={styles.powerpoint} ref={power}></div>
-                        </div>
-                        <button>Sign up</button>
-                    </form>
-                </div>
+            <div className={styles.signup}>
+                <form onSubmit={handleSignup}>
+                    <label htmlFor={styles.chk} aria-hidden="true">Sign up</label>
+                    <br></br><br/>
+                    <span style={{color: 'white'}}>{signupWarning} </span>
+                    <input type="text" name="txt" placeholder="Username" required onChange={(e) => username.current = e.target.value}/>
+                    <input type="email" name="email" placeholder="Email" required onChange={(e) => email.current = e.target.value}/>
+                    <input 
+                        type="password" name="pswd" 
+                        placeholder="Password" required 
+                        onInput={passwordStrengthCheck}
+                        value={password}
+                    />
+                    <div className={styles.powercontainer}>
+                        <div className={styles.powerpoint} ref={power}></div>
+                    </div>
+                    <button>Sign up</button>
+                </form>
+            </div>
 
-                <div className={styles.login}>
-                    <form onSubmit={handleLogin}>
-                        <label htmlFor={styles.chk} aria-hidden="true">Login</label>
-                        <br></br><br/>
-                        <input type="text" name="username" placeholder="Username" required onChange={(e) => username.current = e.target.value}/>
-                        <input type="password" name="pswd" placeholder="Password" required onChange={(e) => loginPassword.current = e.target.value}/>
-                        <button>Login</button>
-                    </form>
-                </div>
+            <div className={styles.login}>
+                <form onSubmit={handleLogin}>
+                    <label htmlFor={styles.chk} aria-hidden="true">Login</label>
+                    <br></br><br/>
+                    <input type="text" name="username" placeholder="Username" required onChange={(e) => username.current = e.target.value}/>
+                    <input type="password" name="pswd" placeholder="Password" required onChange={(e) => loginPassword.current = e.target.value}/>
+                    <span style={{color: 'red'}}>{warning}</span>
+                    <button>Login</button>
+                </form>
             </div>
         </div>
+    </div>
     );
 }
 

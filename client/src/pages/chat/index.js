@@ -13,6 +13,7 @@ const Chat = ({ username }) => {
     const socket = useSocket();
     const [roomUsers, setRoomUsers] = useState([]);
     const [availableRooms, setAvailableRooms] = useState([]);
+    
     useEffect(() => {
         if (socket.readyState !== 1) {
             console.log("socket not ready")

@@ -24,7 +24,7 @@ const Home = ({ username, onUsernameChange, setUsername}) => {
                     Join Chat
                 </button>
 
-                <p>Sign up <a href='/login'>here</a> first</p>
+                <p>Sign up <a href='/signup'>here</a> first</p>
             </div>
         </div>
     );

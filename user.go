@@ -64,6 +64,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 	var user User
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
+		fmt.Println(r.Body)
 		log.Println("ERROR: decode error: ", err)
 	}
 	if user.Username == "" {
