@@ -6,6 +6,7 @@ const backend_url = "http://" + process.env.REACT_APP_BACKEND_URL + ":" + proces
 const holodex_key = process.env.REACT_APP_HOLODEX_API_KEY;
 const Holodex = () => {
     const channelString =  useRef('');
+    const [reload, setReload] = useState(1);
     // const [channelString, setChannelString] = useState('');
     const [channelData, setChannelData] = useState(null);
 
@@ -27,7 +28,6 @@ const Holodex = () => {
             // setChannelString(json.message);
             console.log("got: " + channelString.current);
         }
-        
 
         const fetchData = async () => {
             await readTextFile();
@@ -40,23 +40,22 @@ const Holodex = () => {
             const response = await fetch(
                 url, 
                 {
-                    headers: {
-                        'X-APIKEY': holodex_key,
-                    }
+                    headers: { 'X-APIKEY': holodex_key, }
                 }
-        );
+            );
             const json = await response.json();
             setChannelData(json);
         };
         fetchData();
         console.log(channelData);
-    }, []);
+    }, [reload]);
 
     
     return (
         <div className={styles.container}>  
             <h1>Holodex</h1>
             <LiveChannels 
+                setReload = {setReload}
                 channeljson = {channelData}
             />
         </div>

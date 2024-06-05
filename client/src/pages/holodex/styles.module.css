@@ -8,24 +8,32 @@
     margin: 0;
 }
 .card {
-    display: block;
-    /* left: 100px; */
-    ;
+    /* display: inline-block; */
+    display: flex;
+    /* justify-content: space-between; */
+
+    align-items: center;
 }   
 
 .cardBody {
-    /* display: flex; */
+    margin-top: 20px;
+    display: inline-block;
     justify-content: end;
 }
 
 .channelName {
     display: flex;
+    text-shadow: 1px 1px 0.5px #000;
+    color: rgb(231, 199, 157);
     text-align: end;
+    font-size: 24px;
+    font-weight: 400;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
 li {
     list-style: none;
-    display: inline ;
+    display: inline-flex ;
     height: 125px;
     /* width: 40%; */
 }

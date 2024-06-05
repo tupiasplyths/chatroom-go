@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import styles from './styles.module.css';
 import { IoReloadSharp } from "react-icons/io5";
-const LiveChannels = ({ channeljson }) => {
+const LiveChannels = ({ channeljson, setReload }) => {
     const [channels, setChannel] = useState([]);
     // const [imgurl, setImgurl] = useState([]);
-    const [reload, setReload] = useState(1);
+    
 
     const reloadComponent = () => {
         setReload((prev) => prev + 1);
@@ -22,6 +22,7 @@ const LiveChannels = ({ channeljson }) => {
                 // setChannel((prev) => [...prev, channeljson[i]]);
             };
         }
+        console.log("there are " + channels.length + " live channels");
         setChannel(channels);
     }, [channeljson])
     return (
@@ -34,11 +35,12 @@ const LiveChannels = ({ channeljson }) => {
                             <img 
                                 src={channel.channel.photo} 
                                 alt={channel.channel.name} 
-                                width={125}
-                                height={125}
+                                width={180}
+                                height={180}
                             />
                             <div className={styles.channelName}>
                                 {channel.channel.name}
+
                             </div>
                             {/* <p className="card-text">{channel.description}</p> */}
                         </li>
