@@ -62,6 +62,7 @@ func signup(w http.ResponseWriter, r *http.Request) {
 func login(w http.ResponseWriter, r *http.Request) {
 	enableCors(&w)
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Credentials", "true")
 	// session, err := store.Get(r, "chatroom_session")
 	// if err != nil {
 	// 	http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -74,7 +75,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 		log.Println("ERROR: decode error: ", err)
 	}
 	if user.Username == "" {
-		w.WriteHeader(http.StatusOK)
+		// w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(&Response{Message: "username is empty"})
 		return
 	}
@@ -90,10 +91,10 @@ func login(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	} else {
 		flag = hash.CheckHash(user.Password, hashedPassword)
-		fmt.Printf("flag is %t\n", flag)
+		log.Printf("%s's password is %t\n", user.Username, flag)
 	}
 	if !flag {
-		w.WriteHeader(http.StatusOK)
+		// w.WriteHeader(http.StatusOK)
 		// session.Values["authenticated"] = false
 		json.NewEncoder(w).Encode(&Response{Message: "wrong username or password"})
 		return		
@@ -112,22 +113,17 @@ func login(w http.ResponseWriter, r *http.Request) {
 	// if err != nil {
 	// 	log.Println("ERROR: saving session error: ", err)
 	// }
+	session.SetSession(w, r, user.Username)
 	json.NewEncoder(w).Encode(&Response{Message: "login success"})
+	
 	log.Printf("user %s logged in\n", user.Username)
 	// session.Save(r, w)
-	session.SetSession(w, r)
 }
 
 func authenticate(w http.ResponseWriter, r *http.Request) {
 	enableCors(&w)
 	w.Header().Set("Content-Type", "application/json")
-	session, err := store.Get(r, "chatroom_session")
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	if auth, ok := session.Values["authenticated"].(bool); !ok || !auth {
+	if session.CheckSession(w, r) {
 		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(&Response{Message: "authenticated"})
 	} else {

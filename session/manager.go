@@ -1,8 +1,9 @@
-package session;
+package session
 
 import (
 	"os"
-	"fmt"
+	// "fmt"
+	// "encoding/json"
 	"net/http"
 
 	"github.com/joho/godotenv"
@@ -16,28 +17,41 @@ var (
 	store = sessions.NewCookieStore(key)
 )
 
-func CheckSession(w http.ResponseWriter, r *http.Request) {
+func CheckSession(w http.ResponseWriter, r *http.Request) bool {
+	// session, err := store.Get(r, "chatroom_session")
+	// if err != nil {
+	// 	http.Error(w, err.Error(), http.StatusInternalServerError)
+	// 	return
+	// }
+
+	// if auth, ok := session.Values["authenticated"].(bool); !ok || !auth {
+	// 	http.Error(w, "Forbidden", http.StatusForbidden)
+	// 	return
+	// }
+	
+	// fmt.Fprintf(w, "Hello, %v\n", session.Values["username"])
+	
 	session, err := store.Get(r, "chatroom_session")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		return false
 	}
 
 	if auth, ok := session.Values["authenticated"].(bool); !ok || !auth {
-		http.Error(w, "Forbidden", http.StatusForbidden)
-		return
+		return false 
+	} else {
+		return true
 	}
-	
-	fmt.Fprintf(w, "Hello, %v\n", session.Values["username"])
 }
 
-func SetSession(w http.ResponseWriter, r *http.Request) {
+func SetSession(w http.ResponseWriter, r *http.Request, username string) {
 	session, err := store.Get(r, "chatroom_session")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	session.Values["authenticated"] = true
+	session.Values["username"] = username
 	session.Save(r, w)
 }
 
