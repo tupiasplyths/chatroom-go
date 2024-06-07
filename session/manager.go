@@ -1,19 +1,23 @@
 package session;
 
 import (
+	"os"
 	"fmt"
 	"net/http"
+
+	"github.com/joho/godotenv"
 	"github.com/gorilla/sessions"
 )
 
 var (
-	key = []byte("bun-bun-cha")
-	encryption_key = []byte("bun-bun-cha-encryption-key")
-	store = sessions.NewCookieStore(key, encryption_key)
+	_ = godotenv.Load(".env")
+	key = []byte(os.Getenv("SESSION_KEY"))
+	// encryption_key = []byte("bun-bun-cha-encryption-key")
+	store = sessions.NewCookieStore(key)
 )
 
-func checkSession(w http.ResponseWriter, r *http.Request) {
-	session, err := store.Get(r, "cookie-name")
+func CheckSession(w http.ResponseWriter, r *http.Request) {
+	session, err := store.Get(r, "chatroom_session")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -27,8 +31,8 @@ func checkSession(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Hello, %v\n", session.Values["username"])
 }
 
-func setSession(w http.ResponseWriter, r *http.Request) {
-	session, err := store.Get(r, "cookie-name")
+func SetSession(w http.ResponseWriter, r *http.Request) {
+	session, err := store.Get(r, "chatroom_session")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -37,8 +41,8 @@ func setSession(w http.ResponseWriter, r *http.Request) {
 	session.Save(r, w)
 }
 
-func clearSession(w http.ResponseWriter, r *http.Request) {
-	session, err := store.Get(r, "cookie-name")
+func ClearSession(w http.ResponseWriter, r *http.Request) {
+	session, err := store.Get(r, "chatroom_session")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

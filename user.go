@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/tupiasplyths/chatroom-server/session"
 	// "github.com/google/uuid"
 	// "github.com/gorilla/sessions"
 	"github.com/tupiasplyths/chatroom-server/hash"
@@ -61,13 +62,13 @@ func signup(w http.ResponseWriter, r *http.Request) {
 func login(w http.ResponseWriter, r *http.Request) {
 	enableCors(&w)
 	w.Header().Set("Content-Type", "application/json")
-	session, err := store.Get(r, "chatroom_session")
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
+	// session, err := store.Get(r, "chatroom_session")
+	// if err != nil {
+	// 	http.Error(w, err.Error(), http.StatusInternalServerError)
+	// 	return
+	// }
 	var user User
-	err = json.NewDecoder(r.Body).Decode(&user)
+	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
 		fmt.Println(r.Body)
 		log.Println("ERROR: decode error: ", err)
@@ -93,7 +94,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 	}
 	if !flag {
 		w.WriteHeader(http.StatusOK)
-		session.Values["authenticated"] = false
+		// session.Values["authenticated"] = false
 		json.NewEncoder(w).Encode(&Response{Message: "wrong username or password"})
 		return		
 	}
@@ -108,11 +109,12 @@ func login(w http.ResponseWriter, r *http.Request) {
 	// http.SetCookie(w, cookie)
 	// session.Values["authenticated"] = true
 	// session.Values["username"] = user.Username
-	if err != nil {
-		log.Println("ERROR: saving session error: ", err)
-	}
+	// if err != nil {
+	// 	log.Println("ERROR: saving session error: ", err)
+	// }
 	json.NewEncoder(w).Encode(&Response{Message: "login success"})
-	session.Save(r, w)
+	// session.Save(r, w)
+	session.SetSession(w, r)
 }
 
 func authenticate(w http.ResponseWriter, r *http.Request) {
