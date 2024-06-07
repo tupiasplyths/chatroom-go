@@ -7,8 +7,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/google/uuid"
-	"github.com/gorilla/sessions"
+	// "github.com/google/uuid"
+	// "github.com/gorilla/sessions"
 	"github.com/tupiasplyths/chatroom-server/hash"
 )
 
@@ -26,7 +26,6 @@ type Response struct {
 
 func signup(w http.ResponseWriter, r *http.Request) {
 	enableCors(&w)
-	// w.Header().Add("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Content-Type", "application/json")
 	
 	var user User
@@ -98,25 +97,25 @@ func login(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(&Response{Message: "wrong username or password"})
 		return		
 	}
-	w.WriteHeader(http.StatusOK)
-	cookie := sessions.NewCookie(
-		"chatroom_session", 
-		uuid.NewString(), 
-		&sessions.Options{
-			MaxAge: 300,
-		},
-	)
-	http.SetCookie(w, cookie)
-	session.Values["authenticated"] = true
-	session.Values["username"] = user.Username
-	session.Save(r, w)
+	// w.WriteHeader(http.StatusOK)
+	// cookie := sessions.NewCookie(
+	// 	"chatroom_session", 
+	// 	uuid.NewString(), 
+	// 	&sessions.Options{
+	// 		MaxAge: 300,
+	// 	},
+	// )
+	// http.SetCookie(w, cookie)
+	// session.Values["authenticated"] = true
+	// session.Values["username"] = user.Username
 	if err != nil {
 		log.Println("ERROR: saving session error: ", err)
 	}
 	json.NewEncoder(w).Encode(&Response{Message: "login success"})
+	session.Save(r, w)
 }
 
-func authenicate(w http.ResponseWriter, r *http.Request) {
+func authenticate(w http.ResponseWriter, r *http.Request) {
 	enableCors(&w)
 	w.Header().Set("Content-Type", "application/json")
 	session, err := store.Get(r, "chatroom_session")
@@ -124,7 +123,8 @@ func authenicate(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	if session.Values["authenticated"] == true {
+
+	if auth, ok := session.Values["authenticated"].(bool); !ok || !auth {
 		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(&Response{Message: "authenticated"})
 	} else {

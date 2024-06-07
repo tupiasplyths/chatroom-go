@@ -3,3 +3,5 @@ chatroom-server
 chatroom-server.*
 *.onnx
 channelIDs.txt
+logs/
+logs/*

@@ -13,6 +13,7 @@ import (
 )
 
 var (
+	logfile, _ = os.OpenFile("logs/server.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
 	_ = godotenv.Load(".env")
 	database = db.DB_Connect()
 	key = []byte(os.Getenv("SESSION_KEY"))
@@ -20,6 +21,7 @@ var (
 )
 
 func main() {
+	log.SetOutput(logfile)
 	store.Options = &sessions.Options{
 		Domain: "localhost",
 		MaxAge: 300,
@@ -39,6 +41,6 @@ func main() {
 	http.HandleFunc("/signup", signup)
 	http.HandleFunc("/login", login)
 	http.HandleFunc("/api/channelID", returnChannelID)
-	http.HandleFunc("/api/authenticate", authenicate)
+	http.HandleFunc("/api/authenticate", authenticate)
 	log.Fatal(http.ListenAndServe(listen_address, nil))
 }
