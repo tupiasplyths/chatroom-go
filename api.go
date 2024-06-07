@@ -24,7 +24,6 @@ func returnChannelID(w http.ResponseWriter, r *http.Request) {
 	enableCors(&w)
 	w.Header().Set("Content-Type", "application/json")
 
-	// read channelIDs.txt and parse to string
 	file, err := os.Open("channelIDs.txt")
 	if err != nil {
 		log.Fatal(err)

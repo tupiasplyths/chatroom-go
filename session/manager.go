@@ -18,19 +18,6 @@ var (
 )
 
 func CheckSession(w http.ResponseWriter, r *http.Request) bool {
-	// session, err := store.Get(r, "chatroom_session")
-	// if err != nil {
-	// 	http.Error(w, err.Error(), http.StatusInternalServerError)
-	// 	return
-	// }
-
-	// if auth, ok := session.Values["authenticated"].(bool); !ok || !auth {
-	// 	http.Error(w, "Forbidden", http.StatusForbidden)
-	// 	return
-	// }
-	
-	// fmt.Fprintf(w, "Hello, %v\n", session.Values["username"])
-	
 	session, err := store.Get(r, "chatroom_session")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -45,6 +32,11 @@ func CheckSession(w http.ResponseWriter, r *http.Request) bool {
 }
 
 func SetSession(w http.ResponseWriter, r *http.Request, username string) {
+	store.Options = &sessions.Options{
+		MaxAge: 300,
+		SameSite: http.SameSiteNoneMode,
+		Secure: true,
+	}
 	session, err := store.Get(r, "chatroom_session")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
