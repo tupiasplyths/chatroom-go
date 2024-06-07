@@ -113,6 +113,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 	// 	log.Println("ERROR: saving session error: ", err)
 	// }
 	json.NewEncoder(w).Encode(&Response{Message: "login success"})
+	log.Printf("user %s logged in\n", user.Username)
 	// session.Save(r, w)
 	session.SetSession(w, r)
 }
