@@ -4,10 +4,9 @@ import { useEffect, useState } from 'react';
 import SendMessage from './send-message';
 import UsersAndRooms from './userandroom';
 import { useSocket } from '../../wsContext';
-import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 
-// const socket = new WebSocket("ws://localhost:3789/ws?name=abc");
+const backend_url = "http://" + process.env.REACT_APP_BACKEND_URL + ":" + process.env.REACT_APP_BACKEND_PORT; 
 
 const Chat = ({ username }) => {
 	const navigate = useNavigate();
@@ -16,19 +15,26 @@ const Chat = ({ username }) => {
 	const socket = useSocket();
 	const [roomUsers, setRoomUsers] = useState([]);
 	const [availableRooms, setAvailableRooms] = useState([]);
-	const [cookies] = useCookies(['chatroom_session']);
 	
+	const authenticate = () => {
+		fetch(backend_url + "/api/authenticate", {
+			method: "GET",
+			credentials: "include",
+			headers: {
+				"Accept": "application/json",
+				"Content-Type": "application/json",
+				"Access-Control-Allow-Credentials": true
+			}
+		}).then((res) => res.json()).then((data) => {
+			console.log(data.message);
+			if (data.message !== 'authenticated') {
+				navigate('/', { replace: true });
+			}
+		}).catch((err) => console.log(err));
+	}
+
 	useEffect(() => {
-		if (!cookies.chatroom_session || cookies.chatroom_session === undefined) {
-			console.log("no cookies");
-			navigate('/', { replace:true });
-			return;
-		}
-		if (!cookies.chatroom_session.authenticated) {
-			console.log("not authenticated");
-			navigate('/', { replace:true });
-			return;
-		}
+		authenticate();
 		if (socket.readyState !== 1) {
 			console.log("socket not ready")
 			setTimeout(() => { }, 5000);

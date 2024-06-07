@@ -28,7 +28,7 @@
     font-weight: 400;
     font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
-li {
+li.channels{
     list-style: none;
     display: inline-flex ;
     height: 125px;

@@ -31,7 +31,7 @@ const LiveChannels = ({ channeljson, setReload }) => {
 			{channels.length > 0 && channels.map((channel, i) => (
 				<div className={styles.card} key={i}>
 					<div className={styles.cardBody}>
-						<li>
+						<li className={styles.channels}>
 							<img 
 								src={channel.channel.photo} 
 								alt={channel.channel.name} 

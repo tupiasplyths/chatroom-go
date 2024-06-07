@@ -1,6 +1,7 @@
-import { createRef, useRef, useState } from "react";
+import { createRef, useEffect, useRef, useState } from "react";
 import styles from './styles.module.css';
 import { useNavigate } from 'react-router-dom';
+
 const backend_url = "http://" + process.env.REACT_APP_BACKEND_URL + ":" + process.env.REACT_APP_BACKEND_PORT; 
 
 const Signup = () => {
@@ -14,6 +15,7 @@ const Signup = () => {
 	const [checked, setChecked] = useState(false); 
 	const [warning, setWarning] = useState('');
 	const [signupWarning, setSignupWarning] = useState('');
+
 	const handleLogin = (e) => {
 		e.preventDefault();
 		let jsonbody = JSON.stringify({
@@ -23,9 +25,11 @@ const Signup = () => {
 		console.log(jsonbody);
 		fetch(backend_url + "/login", {
 			method: "POST",
+			credentials: "include",
 			headers: {
 				"Accept": "application/json",
-				"Content-Type": "application/json"
+				"Content-Type": "application/json",
+				"Access-Control-Allow-Credentials": true
 			},
 			body: jsonbody
 		}).then((res) => res.json()).then((data) => {
@@ -82,6 +86,27 @@ const Signup = () => {
 		power.current.style.backgroundColor = colorPower[point]; 
 		console.log("width should be " + widthPower[point]);
 	}
+
+	const authenticate = () => {
+		fetch(backend_url + "/api/authenticate", {
+			method: "GET",
+			credentials: "include",
+			headers: {
+				"Accept": "application/json",
+				"Content-Type": "application/json",
+				"Access-Control-Allow-Credentials": true
+			}
+		}).then((res) => res.json()).then((data) => {
+			console.log(data.message);
+			if (data.message === 'authenticated') {
+				navigate('/home', { replace: true });
+			}
+		}).catch((err) => console.log(err));
+	}
+
+	useEffect(() => {
+		authenticate();
+	}, []);
 
 	return (
 	<div className={styles.body}>
