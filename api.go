@@ -18,6 +18,9 @@ func enableCors(w *http.ResponseWriter) {
 	// allow cors for any origin
 	// TODO: delete when implement SSL
 	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+	(*w).Header().Set("Access-Control-Allow-Credentials", "true")
+	(*w).Header().Set("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Credentials")
+	(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
 }
 
 func returnChannelID(w http.ResponseWriter, r *http.Request) {

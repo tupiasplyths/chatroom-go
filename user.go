@@ -33,6 +33,11 @@ func signup(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println("ERROR: json decode error: ", err)
 	}
+	if user.Username == "" {
+		w.WriteHeader(http.StatusOK)
+		json.NewEncoder(w).Encode(&Response{Message: "username is empty"})
+		return
+	}
 	hashedPassword, err := hash.HashString(user.Password)
 	if err != nil {
 		log.Println("ERROR: hashing error: ", err)
