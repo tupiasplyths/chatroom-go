@@ -35,7 +35,7 @@ func SetSession(w http.ResponseWriter, r *http.Request, username string) {
 	store.Options = &sessions.Options{
 		MaxAge: 300,
 		SameSite: http.SameSiteNoneMode,
-		Secure: true,
+		// Secure: true,
 	}
 	session, err := store.Get(r, "chatroom_session")
 	if err != nil {
