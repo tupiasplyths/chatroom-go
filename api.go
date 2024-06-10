@@ -7,6 +7,12 @@ import (
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/joho/godotenv"
+)
+
+var (
+	_ = godotenv.Load(".env")
 )
 
 func CountClients(server *WsServer) int {
@@ -17,8 +23,8 @@ func enableCors(w *http.ResponseWriter) {
 	// (*w).Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
 	// allow cors for any origin
 	// TODO: delete when implement SSL
-	(*w).Header().Set("Access-Control-Allow-Origin", "*")
-	(*w).Header().Set("Access-Control-Allow-Credentials", "true")
+	(*w).Header().Set("Access-Control-Allow-Origin", os.Getenv("FRONTEND_URL"))
+	// (*w).Header().Set("Access-Control-Allow-Credentials", "true")
 	(*w).Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Access-Control-Allow-Credentials, Access-Control-Allow-Origin")
 	(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
 }
