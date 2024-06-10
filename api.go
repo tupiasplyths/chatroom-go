@@ -47,6 +47,6 @@ func returnChannelID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.WriteHeader(205)
+	w.WriteHeader(http.StatusNoContent)
 	json.NewEncoder(w).Encode(&Response{Message: "no channelIDs"})
 }

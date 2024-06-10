@@ -29,7 +29,8 @@ const Signup = () => {
 			headers: {
 				"Accept": "application/json",
 				"Content-Type": "application/json",
-				"Access-Control-Allow-Credentials": true
+				"Access-Control-Allow-Credentials": true,
+				"Access-Control-Allow-Origin": "*"
 			},
 			body: jsonbody
 		}).then((res) => res.json()).then((data) => {
@@ -50,7 +51,9 @@ const Signup = () => {
 			method: "POST",
 			headers: {
 				"Accept": "application/json",
-				"Content-Type": "application/json"
+				"Content-Type": "application/json",
+				"Access-Control-Allow-Credentials": true,
+				"Access-Control-Allow-Origin": "*"
 			},
 			body: JSON.stringify({
 				username: username.current,
