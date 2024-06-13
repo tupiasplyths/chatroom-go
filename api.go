@@ -20,7 +20,7 @@ func CountClients(server *WsServer) int {
 }
 
 func enableCors(w *http.ResponseWriter) {
-	// (*w).Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
+	(*w).Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
 	// allow cors for any origin
 	// TODO: delete when implement SSL
 	(*w).Header().Set("Access-Control-Allow-Origin", os.Getenv("FRONTEND_URL"))
