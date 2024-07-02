@@ -23,7 +23,6 @@ func (server *WsServer) Run() {
 		select {
 		case client := <-server.register:
 			server.registerClient(client)
-
 		case client := <-server.unregister:
 			server.unregisterClient(client)
 		case message := <-server.broadcast:

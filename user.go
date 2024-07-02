@@ -24,7 +24,7 @@ type Response struct {
 }
 
 func signup(w http.ResponseWriter, r *http.Request) {
-	enableCors(&w)
+	enableCors(&w, r)
 	w.Header().Set("Content-Type", "application/json")
 	
 	var user User
@@ -63,7 +63,7 @@ func signup(w http.ResponseWriter, r *http.Request) {
 }
 
 func login(w http.ResponseWriter, r *http.Request) {
-	enableCors(&w)
+	enableCors(&w, r)
 	w.Header().Set("Access-Control-Allow-Credentials", "true")
 	w.Header().Set("Content-Type", "application/json")
 	var user User
@@ -101,7 +101,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 }
 
 func authenticate(w http.ResponseWriter, r *http.Request) {
-	enableCors(&w)
+	enableCors(&w, r)
 	w.Header().Set("Access-Control-Allow-Credentials", "true")
 	w.Header().Set("Content-Type", "application/json")
 	if session.CheckSession(w, r) {

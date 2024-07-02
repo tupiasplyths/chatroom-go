@@ -3,6 +3,9 @@ package main
 import (
 	"bufio"
 	"encoding/json"
+	"slices"
+	"strings"
+
 	// "fmt"
 	"log"
 	"net/http"
@@ -13,24 +16,30 @@ import (
 
 var (
 	_ = godotenv.Load(".env")
+	allowedOrigin = strings.Split(os.Getenv("ALLOWED_ORIGIN"), ", ")
+
 )
 
 func CountClients(server *WsServer) int {
 	return len(server.clients)
 }
 
-func enableCors(w *http.ResponseWriter) {
-	(*w).Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
+func enableCors(w *http.ResponseWriter, r *http.Request) {
+	origin := r.Header.Get("Origin")
+	if slices.Contains(allowedOrigin, origin) {
+		// (*w).Header().Set("Access-Control-Allow-Origin", os.Getenv("FRONTEND_URL"))
+		(*w).Header().Set("Access-Control-Allow-Origin", origin)
+	}
+	// (*w).Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
 	// allow cors for any origin
 	// TODO: delete when implement SSL
-	(*w).Header().Set("Access-Control-Allow-Origin", os.Getenv("FRONTEND_URL"))
 	// (*w).Header().Set("Access-Control-Allow-Credentials", "true")
 	(*w).Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Access-Control-Allow-Credentials, Access-Control-Allow-Origin")
 	(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
 }
 
 func returnChannelID(w http.ResponseWriter, r *http.Request) {
-	enableCors(&w)
+	enableCors(&w, r)
 	w.Header().Set("Content-Type", "application/json")
 
 	file, err := os.Open("channelIDs.txt")
