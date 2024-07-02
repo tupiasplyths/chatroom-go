@@ -20,7 +20,7 @@ var (
 )
 
 type Client struct {
-	Name string
+	name string
 	conn *websocket.Conn
 	wsServer *WsServer
 	send chan []byte
@@ -33,7 +33,7 @@ func newClient(conn *websocket.Conn, wsServer *WsServer, name string) *Client {
 		wsServer: wsServer,
 		send: make(chan []byte, 256),
 		rooms: make(map[*Room]bool),
-		Name: name,
+		name: name,
 	}
 }
 
@@ -138,7 +138,7 @@ func (client *Client) disconnect() {
 }
 
 func (client *Client) GetName() string {
-	return client.Name
+	return client.name
 }
 
 func (client *Client) handleNewMessage(jsonMessage []byte) {
