@@ -58,7 +58,7 @@ func (room *Room) notifyClientsJoined(client *Client) {
 		Action:  SendMessageAction,
 		Target:  room,
 		Message: fmt.Sprintf("welcome %s", client.GetName()),
-		Sender:  &Client{Name: "bot"},
+		Sender:  &Client{name: "bot"},
 	}
 
 	room.broadcastToRoom(message.encode())
@@ -73,12 +73,9 @@ func (room *Room) ListRoomsClients() {
 		Action:  "list-users",
 		Target:  room,
 		Message: fmt.Sprintf("%s", clients),
-		Sender:  &Client{Name: "bot"},
+		Sender:  &Client{name: "bot"},
 	}
 	room.broadcastToRoom(message.encode())
-	// for client := range room.clients {
-	// 	client.send <- message.encode()
-	// }
 	log.Println("sending users list")
 
 }

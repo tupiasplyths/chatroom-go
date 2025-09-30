@@ -22,7 +22,7 @@ func main() {
 	go WsServer.Run()
 
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
-		enableCors(&w)
+		enableCors(&w, r)
 		ServeWS(w, r, WsServer)
 	})
 	http.HandleFunc("/clientcount", func(w http.ResponseWriter, r *http.Request) {
